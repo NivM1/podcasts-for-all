@@ -10,6 +10,7 @@ const LOG_MESSAGES = {
     START_CONVERT_PODCAST_TO_SERIES: "Start convert podcast to series: ",
     START_GET_BEST_PODCASTS: "Start get best podcasts: ",
     START_SEARCH_PODCASTS: "Start search for podcasts: ",
+    START_SEARCH_PODCASTS_FOR_GENRE: "Start search for podcasts by one of the genres: ",
     START_GET_PODCAST_BY_ID: "Start get podcast by id: ",
     START_GET_EPISODE_BY_ID: "Start get episode by id: ",
     SUCCESS_GET_BEST_PODCASTS: "Success- get best podcasts! number of results: ",
@@ -69,9 +70,9 @@ const CATALOGS = {
         ID: 'byCountry',
         NAME: 'Countries'
     },
-    BY_LANGUAGE: {
-        ID: 'byLanguage',
-        NAME: 'Language'
+    BY_MOOD: {
+        ID: 'byMood',
+        NAME: 'Moods'
     },
     FEELING_LUCKY: {
         ID: 'feelingLucky',

@@ -51,19 +51,29 @@ builder.defineCatalogHandler(async ({
 		return {
 			metas: serieses.asArray
 		};
+	} else if (extra.genre && id === constants.CATALOGS.BY_MOOD.ID) {
+		logger.info(constants.CATALOGS.BY_MOOD.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_COUNTRY.NAME, extra.genre);
+
+		let Serieses = [];
+		const podcasts = await podcastsData.searchPodcasts(extra.search, null, null, true);
+		Serieses = await convertors.podcastsToSerieses(podcasts);
+
+		return {
+			metas: Serieses.asArray
+		};
 	}
 
 	// If there is active search using search api instead of best podcasts api
 	if (extra.search) {
 
 		let Serieses = [];
-		if (id === constants.CATALOGS.BY_GENRE.ID){
 
-			logger.info(constants.LOG_MESSAGES.SEARCH_ON_CATALOG_HANDLER + extra.search, constants.HANDLERS.CATALOG, constants.CATALOGS.SEARCH.NAME, extra.search.toLowerCase(), null, {search: extra.search.toLowerCase()});
+		logger.info(constants.LOG_MESSAGES.SEARCH_ON_CATALOG_HANDLER + extra.search, constants.HANDLERS.CATALOG, constants.CATALOGS.SEARCH.NAME, extra.search.toLowerCase(), null, {
+			search: extra.search.toLowerCase()
+		});
 
-			const podcasts = await podcastsData.searchPodcasts(extra.search);
-			Serieses = await convertors.podcastsToSerieses(podcasts);
-		}
+		const podcasts = await podcastsData.searchPodcasts(extra.search);
+		Serieses = await convertors.podcastsToSerieses(podcasts);
 
 		return {
 			metas: Serieses.asArray
@@ -103,7 +113,9 @@ builder.defineStreamHandler(async ({
 	type
 }) => {
 
-	logger.info(constants.LOG_MESSAGES.START_STREAM_HANDLER + "(type: " + type + " & id: " + id + ")", constants.HANDLERS.STREAM, constants.API_CONSTANTS.TYPES.EPISODE, null, 1, {id: id});
+	logger.info(constants.LOG_MESSAGES.START_STREAM_HANDLER + "(type: " + type + " & id: " + id + ")", constants.HANDLERS.STREAM, constants.API_CONSTANTS.TYPES.EPISODE, null, 1, {
+		id: id
+	});
 
 	id = id.replace(constants.ID_PREFIX, "");
 
@@ -116,7 +128,9 @@ builder.defineStreamHandler(async ({
 // Docs: https://github.com/Stremio/stremio-addon-sdk/blob/master/docs/api/requests/defineSubtitlesHandler.md
 builder.defineSubtitlesHandler(async function (args) {
 
-	logger.info(constants.LOG_MESSAGES.START_SUBTITLE_HANDLER + "(type: " + args.type + " & id: " + args.id + ")", constants.HANDLERS.SUBTITLE, constants.API_CONSTANTS.TYPES.EPISODE, null, 1, {id: args.id});
+	logger.info(constants.LOG_MESSAGES.START_SUBTITLE_HANDLER + "(type: " + args.type + " & id: " + args.id + ")", constants.HANDLERS.SUBTITLE, constants.API_CONSTANTS.TYPES.EPISODE, null, 1, {
+		id: args.id
+	});
 
 	return {
 		subtitles: []
