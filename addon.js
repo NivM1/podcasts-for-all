@@ -72,17 +72,6 @@ builder.defineCatalogHandler(async ({
 		return {
 			metas: Serieses.asArray
 		};
-	} 
-	else if (extra.genre && id === constants.CATALOGS.BY_ANIME.ID) {
-		logger.info(constants.CATALOGS.BY_ANIME.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_ANIME.NAME, extra.genre);
-
-		let Serieses = [];
-		const podcasts = await podcastsData.searchPodcasts(constants.CATALOGS.BY_ANIME.NAME + extra.genre, constants.ANIME_GENRES_IDS, null, true);
-		Serieses = await convertors.podcastsToSerieses(podcasts, constants.PODCAST_TYPE.SEARCH);
-
-		return {
-			metas: Serieses.asArray
-		};
 	}
 
 	// If there is active search using search api instead of best podcasts api

@@ -4,7 +4,6 @@ const constants = require('./common/const');
 const countriesData = require("./podcasts/countriesDataFetcher");
 const countries = require("./resources/countries");
 const moods = require("./resources/moods");
-const animes = require("./resources/animes");
 const trends = require("./resources/trends");
 genres.genresById = genresData.createPodcastGenresById(genres.genres);
 
@@ -41,13 +40,6 @@ module.exports = {
         },
         {
             type: constants.CATALOGS.TYPE,
-            id: constants.CATALOGS.BY_ANIME.ID,
-            name: constants.CATALOGS.BY_ANIME.NAME,
-            genres: animes,
-            extraSupported: ['genre', 'skip']
-        },
-        {
-            type: constants.CATALOGS.TYPE,
             id: constants.CATALOGS.FEELING_LUCKY.ID,
             name: constants.CATALOGS.FEELING_LUCKY.NAME,
             genres: constants.CATALOGS.FEELING_LUCKY.GENRES,
@@ -80,5 +72,5 @@ module.exports = {
     contactEmail: constants.CONTACT_EMAIL,
     logo: constants.ADDON_LOGO,
     background: constants.ADDON_BACKGROUND,
-    description: "Stream the best and most verstile HQ Podcasts- It will be a great listening experience! Over 1,000,000 Podcasts and 44,000,000 Episodes, All genres & languages (Powered by LISTEN NOTES)"
+    description: "Join Thousands of daily listeners! Stream the best & most verstile HQ Podcasts- It will be a great listening experience! Over 1,000,000 Podcasts and 44,000,000 Episodes, All genres, languages, moods & trends"
 };

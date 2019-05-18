@@ -74,10 +74,6 @@ const CATALOGS = {
         ID: 'byMood',
         NAME: 'Moods'
     },
-    BY_ANIME: {
-        ID: 'byAnime',
-        NAME: 'Anime'
-    },
     BY_TREND: {
         ID: 'byTrend',
         NAME: '100 Trends'
@@ -140,8 +136,6 @@ const API_CONSTANTS = {
     INSTAGRAM_BASE_URL: "https://www.instagram.com/"
 };
 
-const ANIME_GENRES_IDS = [82];
-
 const PODCAST_TYPE = {
     SEARCH: 'SEARCH'
 };
@@ -159,6 +153,5 @@ module.exports = {
     ID_PREFIX,
     CONTACT_EMAIL,
     ADDON_LOGO,
-    ADDON_BACKGROUND,
-    ANIME_GENRES_IDS
+    ADDON_BACKGROUND
 };
