@@ -5,9 +5,6 @@ const genresData = require("./genresDataFetcher");
 
 // All functions that convert podcast or episode object to Stremio object
 function episodeToVideo(episode, episodeNumber) {
-
-    //logger.debug(constants.LOG_MESSAGES.START_CONVERT_EPISODE_TO_VIDEO + episode.id, constants.HANDLERS.CONVERTOR, constants.API_CONSTANTS.TYPES.EPISODE, null, 1, episode);
-
     return {
         id: constants.ID_PREFIX + episode.id,
         title: episode.title,
@@ -19,7 +16,6 @@ function episodeToVideo(episode, episodeNumber) {
         available: true,
         episode: episodeNumber,
         season: 1,
-        //trailer: trailer,
         overview: episode.description
     };
 }
@@ -56,27 +52,16 @@ async function podcastToSeries(podcast, origin) {
         series = {
             id: constants.ID_PREFIX + podcast.id,
             type: "series",
-            name: podcast.title,
+            name: podcast.title_original,
             poster: podcast.thumbnail,
-            //genres: genresData.getGenresStringsFromArray(podcast.genre_ids),
             genres: generateBasicGenres(podcast),
             posterShape: "regular",
             background: podcast.image,
             logo: constants.ADDON_LOGO,
-            description: podcast.description,
-
-            director: [podcast.publisher],
-            //imdbRating: 10,
-            //dvdRelease: "",
+            description: podcast.description_original,
+            director: [podcast.publisher_original],
             released: released,
             inTheaters: true,
-            //videos: episodesAsVideos.asArray,
-            //certification: constants.API_CONSTANTS.DEFAULT_CERTIFICATION,
-            //runtime = "Last episode length: " + (podcast.episodes[0].audio_length_sec / 60).toFixed(0) + " minutes",
-            language: podcast.language,
-            country: podcast.country,
-            awards: generateAwards(podcast.explicit_content, podcast.is_claimed),
-            website: podcast.website
         };
     } else {
         series = {
@@ -84,21 +69,14 @@ async function podcastToSeries(podcast, origin) {
             type: "series",
             name: podcast.title,
             poster: podcast.thumbnail,
-            //genres: genresData.getGenresStringsFromArray(podcast.genre_ids),
             genres: generateBasicGenres(podcast),
             posterShape: "regular",
             background: podcast.image,
             logo: constants.ADDON_LOGO,
             description: podcast.description,
-
             director: [podcast.publisher],
-            //imdbRating: 10,
-            //dvdRelease: "",
             released: released,
             inTheaters: true,
-            //videos: episodesAsVideos.asArray,
-            //certification: constants.API_CONSTANTS.DEFAULT_CERTIFICATION,
-            //runtime = "Last episode length: " + (podcast.episodes[0].audio_length_sec / 60).toFixed(0) + " minutes",
             language: podcast.language,
             country: podcast.country,
             awards: generateAwards(podcast.explicit_content, podcast.is_claimed),
@@ -196,8 +174,6 @@ function podcastToSeriesVideo(podcast) {
         title: podcast.title,
         thumbnail: podcast.thumbnail,
         available: true,
-        //season: 1,
-        //episode: 1,
         trailer: podcast.youtube_url,
         overview: podcast.description
     };
