@@ -1,5 +1,6 @@
 const logger = require("../common/logger");
 const constants = require("../common/const");
+const podcastsApi = require("../common/podcastsApi");
 
 async function getBestPodcasts(skip, genreId, region) {
 
@@ -22,13 +23,7 @@ async function getBestPodcasts(skip, genreId, region) {
 
     try {
         do {
-            const result = await constants.apiInstance.get(constants.PODCASTS_DATA_API_ROUTES.BEST_PODCASTS, {
-                params: {
-                    page: internalPage,
-                    genre_id: genre,
-                    region: regionFilter
-                }
-            });
+            const result = await podcastsApi.getBestPodcast(internalPage, genre, regionFilter);
 
             podcasts.push(...result.data.podcasts);
             canKeepPulling = result.data.has_next;
@@ -60,17 +55,7 @@ async function searchPodcasts(searchTerm, genreIds, offsetForPagination, isGenre
     if (offsetForPagination) offset = offsetForPagination;
 
     try {
-        const result = await constants.apiInstance.get(constants.PODCASTS_DATA_API_ROUTES.SEARCH, {
-            params: {
-                q: searchTerm,
-                sort_by_date: constants.API_CONSTANTS.SORT.BY_RELEVANCE,
-                type: constants.API_CONSTANTS.TYPES.PODCAST,
-                offset: offset,
-                genre_Ids: genreIds,
-                only_in: [constants.API_CONSTANTS.ONLY_IN_FIELDS.TITLE, constants.API_CONSTANTS.ONLY_IN_FIELDS.DESCRIPTION],
-                safe_mode: constants.API_CONSTANTS.EXCLUDE_EXCPLICIT.YES
-            }
-        });
+        const result = await podcastsApi.searchPodcasts(searchTerm, genreIds, offsetForPagination);
 
         logger.debug(constants.LOG_MESSAGES.SUCCESS_SEARCH_PODCASTS + result.data.results.length, constants.HANDLERS.CATALOG, constants.API_CONSTANTS.TYPES.PODCAST, constants.CATALOGS.SEARCH.NAME, result.data.results.length, result.data.results);
         return result.data.results;
@@ -85,9 +70,7 @@ async function getPodcastById(id, params = {}) {
 
     // For offset for pagination filter
     try {
-        const response = await constants.apiInstance.get(constants.PODCASTS_DATA_API_ROUTES.PODCAST_BY_ID + id, {
-            params
-        });
+        const response = await podcastsApi.getPodcastById(id, params);
         logger.debug(constants.LOG_MESSAGES.SUCCESS_GET_PODCAST_BY_ID + response.data.id, constants.HANDLERS.CATALOG, constants.API_CONSTANTS.TYPES.PODCAST, null, 1, response.data);
         return response.data;
     } catch (e) {
@@ -101,8 +84,14 @@ async function getEpisodeById(id) {
 
     // For offset for pagination filter
     try {
-        const response = await constants.apiInstance.get(constants.PODCASTS_DATA_API_ROUTES.EPISODE_BY_ID + id);
-        logger.debug(constants.LOG_MESSAGES.SUCCESS_GET_EPISODE_BY_ID + response.data.id, constants.HANDLERS.CATALOG, constants.API_CONSTANTS.TYPES.EPISODE, null, 1, response.data);;
+        const response = await podcastsApi.getEpisodeById(id);
+        logger.debug(constants.LOG_MESSAGES.SUCCESS_GET_EPISODE_BY_ID + response.data.id,
+            constants.HANDLERS.CATALOG,
+            constants.API_CONSTANTS.TYPES.EPISODE,
+            null,
+            1,
+            response.data);
+
         return response.data;
     } catch (e) {
         logListenNoteErrors('getting episode by id', e);
@@ -132,7 +121,7 @@ async function getFeelingLucky() {
 
     // For offset for pagination filter
     try {
-        const response = await constants.apiInstance.get(constants.PODCASTS_DATA_API_ROUTES.FEELING_LUCKY);
+        const response = await podcastsApi.getFeelingLucky();
 
         logger.debug(constants.LOG_MESSAGES.SUCCESS_GET_FEELING_LUCKY + response.data.id, constants.CATALOGS.FEELING_LUCKY, null, 1, response.data);
         return response.data;

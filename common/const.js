@@ -54,15 +54,6 @@ const PODCASTS_API_KEY = {
     KEY: process.env.PODCASTS_API_KEY
 };
 
-// Podcast api docs https://www.listennotes.com/api/docs/
-const apiInstance = axios.create({
-    baseURL: PODCASTS_DATA_BASE_API_URL,
-    //timeout: 2000,
-    headers: {
-        'X-ListenAPI-Key': PODCASTS_API_KEY.KEY
-    }
-});
-
 const ID_PREFIX = "ap";
 
 const CONTACT_EMAIL = "podcasts_for_all@yahoo.com";
@@ -155,7 +146,6 @@ module.exports = {
     PODCASTS_DATA_BASE_API_URL,
     PODCASTS_DATA_API_ROUTES,
     PODCASTS_API_KEY,
-    apiInstance,
     API_CONSTANTS,
     ID_PREFIX,
     CONTACT_EMAIL,

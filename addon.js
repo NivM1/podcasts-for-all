@@ -10,9 +10,9 @@ require('dotenv').config();
 const constants = require('./common/const');
 const logger = require("./common/logger.js");
 const convertors = require("./podcasts/convertors");
-const podcastsData = require("./podcasts/podcastsData");
-const genresData = require("./podcasts/genresData");
-const countriesData = require("./podcasts/countriesData");
+const podcastsData = require("./podcasts/podcastsDataFetcher");
+const genresData = require("./podcasts/genresDataFetcher");
+const countriesData = require("./podcasts/countriesDataFetcher");
 const manifest = require('./manifest');
 
 logger.info(constants.LOG_MESSAGES.START_ADDON + " Version: " + process.env.VERSION);
