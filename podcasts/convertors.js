@@ -5,9 +5,6 @@ const genresData = require("./genresDataFetcher");
 
 // All functions that convert podcast or episode object to Stremio object
 function episodeToVideo(episode, episodeNumber) {
-
-    //logger.debug(constants.LOG_MESSAGES.START_CONVERT_EPISODE_TO_VIDEO + episode.id, constants.HANDLERS.CONVERTOR, constants.API_CONSTANTS.TYPES.EPISODE, null, 1, episode);
-
     return {
         id: constants.ID_PREFIX + episode.id,
         title: episode.title,
@@ -19,7 +16,6 @@ function episodeToVideo(episode, episodeNumber) {
         available: true,
         episode: episodeNumber,
         season: 1,
-        //trailer: trailer,
         overview: episode.description
     };
 }
@@ -58,7 +54,6 @@ async function podcastToSeries(podcast, origin) {
             type: "series",
             name: podcast.title_original,
             poster: podcast.thumbnail,
-            //genres: genresData.getGenresStringsFromArray(podcast.genre_ids),
             genres: generateBasicGenres(podcast),
             posterShape: "regular",
             background: podcast.image,
@@ -179,8 +174,6 @@ function podcastToSeriesVideo(podcast) {
         title: podcast.title,
         thumbnail: podcast.thumbnail,
         available: true,
-        //season: 1,
-        //episode: 1,
         trailer: podcast.youtube_url,
         overview: podcast.description
     };
