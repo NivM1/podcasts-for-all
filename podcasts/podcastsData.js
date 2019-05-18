@@ -48,8 +48,12 @@ async function getBestPodcasts(skip, genreId, region) {
 }
 
 
-async function searchPodcasts(searchTerm, genreIds, offsetForPagination) {
-    logger.debug(constants.LOG_MESSAGES.START_SEARCH_PODCASTS + searchTerm, constants.HANDLERS.CATALOG, constants.API_CONSTANTS.TYPES.PODCAST, constants.CATALOGS.SEARCH.NAME, null, {search: searchTerm});
+async function searchPodcasts(searchTerm, genreIds, offsetForPagination, isGenreSearch) {
+
+    let logMessageBasic = constants.LOG_MESSAGES.START_SEARCH_PODCASTS;
+    if (isGenreSearch) logMessageBasic = constants.LOG_MESSAGES.START_SEARCH_PODCASTS_FOR_GENRE;
+
+    logger.debug(logMessageBasic  + ": " +  searchTerm, constants.HANDLERS.CATALOG, constants.API_CONSTANTS.TYPES.PODCAST, constants.CATALOGS.SEARCH.NAME, null, {search: searchTerm});
 
     // For offset for pagination filter
     let offset = constants.API_CONSTANTS.DEFAULT_OFFSET;
