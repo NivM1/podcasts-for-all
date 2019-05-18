@@ -138,7 +138,12 @@ const API_CONSTANTS = {
 
 const ANIME_GENRES_IDS = [82];
 
+const PODCAST_TYPE = {
+    SEARCH: 'SEARCH'
+};
+
 module.exports = {
+    PODCAST_TYPE,
     CATALOGS,
     HANDLERS,
     LOG_LEVEL,

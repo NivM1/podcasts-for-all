@@ -56,7 +56,7 @@ builder.defineCatalogHandler(async ({
 
 		let Serieses = [];
 		const podcasts = await podcastsData.searchPodcasts(extra.genre, null, null, true);
-		Serieses = await convertors.podcastsToSerieses(podcasts);
+		Serieses = await convertors.podcastsToSerieses(podcasts, constants.PODCAST_TYPE.SEARCH);
 
 		return {
 			metas: Serieses.asArray
@@ -67,7 +67,7 @@ builder.defineCatalogHandler(async ({
 
 		let Serieses = [];
 		const podcasts = await podcastsData.searchPodcasts(constants.CATALOGS.BY_ANIME.NAME + extra.genre, constants.ANIME_GENRES_IDS, null, true);
-		Serieses = await convertors.podcastsToSerieses(podcasts);
+		Serieses = await convertors.podcastsToSerieses(podcasts, constants.PODCAST_TYPE.SEARCH);
 
 		return {
 			metas: Serieses.asArray
