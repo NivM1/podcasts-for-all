@@ -1,7 +1,7 @@
 const logger = require("../common/logger");
 const constants = require("../common/const");
-const podcastsData = require("./podcastsData");
-const genresData = require("./genresData");
+const podcastsData = require("./podcastsDataFetcher");
+const genresData = require("./genresDataFetcher");
 
 // All functions that convert podcast or episode object to Stremio object
 function episodeToVideo(episode, episodeNumber) {
