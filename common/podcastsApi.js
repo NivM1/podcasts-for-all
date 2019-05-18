@@ -35,7 +35,7 @@ const searchPodcasts = function(searchTerm, offset, genreIds) {
     })
 };
 
-const getPodcastById = function(params) {
+const getPodcastById = function(id, params) {
     return apiInstance.get(constants.PODCASTS_DATA_API_ROUTES.PODCAST_BY_ID + id, {
         params
     })

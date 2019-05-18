@@ -70,7 +70,7 @@ async function getPodcastById(id, params = {}) {
 
     // For offset for pagination filter
     try {
-        const response = await podcastsApi.getPodcastById(params);
+        const response = await podcastsApi.getPodcastById(id, params);
         logger.debug(constants.LOG_MESSAGES.SUCCESS_GET_PODCAST_BY_ID + response.data.id, constants.HANDLERS.CATALOG, constants.API_CONSTANTS.TYPES.PODCAST, null, 1, response.data);
         return response.data;
     } catch (e) {
