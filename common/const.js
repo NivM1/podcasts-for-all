@@ -78,6 +78,10 @@ const CATALOGS = {
         ID: 'byAnime',
         NAME: 'Anime'
     },
+    BY_TREND: {
+        ID: 'byTrend',
+        NAME: '100 Trends'
+    },
     FEELING_LUCKY: {
         ID: 'feelingLucky',
         NAME: "Feeling Lucky!",

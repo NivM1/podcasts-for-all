@@ -5,6 +5,7 @@ const countriesData = require("./podcasts/countriesDataFetcher");
 const countries = require("./resources/countries");
 const moods = require("./resources/moods");
 const animes = require("./resources/animes");
+const trends = require("./resources/trends");
 genres.genresById = genresData.createPodcastGenresById(genres.genres);
 
 module.exports = {
@@ -29,6 +30,13 @@ module.exports = {
             id: constants.CATALOGS.BY_MOOD.ID,
             name: constants.CATALOGS.BY_MOOD.NAME,
             genres: moods,
+            extraSupported: ['genre', 'skip']
+        },
+        {
+            type: constants.CATALOGS.TYPE,
+            id: constants.CATALOGS.BY_TREND.ID,
+            name: constants.CATALOGS.BY_TREND.NAME,
+            genres: trends.sort(),
             extraSupported: ['genre', 'skip']
         },
         {

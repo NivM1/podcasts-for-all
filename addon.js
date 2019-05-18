@@ -61,7 +61,18 @@ builder.defineCatalogHandler(async ({
 		return {
 			metas: Serieses.asArray
 		};
-	}
+	} 
+	else if (extra.genre && id === constants.CATALOGS.BY_TREND.ID) {
+		logger.info(constants.CATALOGS.BY_TREND.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_TREND.NAME, extra.genre);
+
+		let Serieses = [];
+		const podcasts = await podcastsData.searchPodcasts(extra.genre, null, null, true);
+		Serieses = await convertors.podcastsToSerieses(podcasts, constants.PODCAST_TYPE.SEARCH);
+
+		return {
+			metas: Serieses.asArray
+		};
+	} 
 	else if (extra.genre && id === constants.CATALOGS.BY_ANIME.ID) {
 		logger.info(constants.CATALOGS.BY_ANIME.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_ANIME.NAME, extra.genre);
 
