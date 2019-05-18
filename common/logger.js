@@ -75,7 +75,6 @@ function errorLog(msg, handler, catalog, genre, count, item) {
 }
 
 module.exports = {
-    log,
     debug: debugLog,
     info: infoLog,
     error: errorLog

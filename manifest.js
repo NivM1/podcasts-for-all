@@ -25,6 +25,13 @@ module.exports = {
         },
         {
             type: constants.CATALOGS.TYPE,
+            id: constants.CATALOGS.BY_LANGUAGE.ID,
+            name: constants.CATALOGS.BY_LANGUAGE.NAME,
+            genres: countriesData.getCountriesStringsArray(countries),
+            extraSupported: ['genre', 'search', 'skip']
+        },
+        {
+            type: constants.CATALOGS.TYPE,
             id: constants.CATALOGS.FEELING_LUCKY.ID,
             name: constants.CATALOGS.FEELING_LUCKY.NAME,
             genres: constants.CATALOGS.FEELING_LUCKY.GENRES,

@@ -78,6 +78,10 @@ const CATALOGS = {
         ID: 'byCountry',
         NAME: 'Countries'
     },
+    BY_LANGUAGE: {
+        ID: 'byLanguage',
+        NAME: 'Language'
+    },
     FEELING_LUCKY: {
         ID: 'feelingLucky',
         NAME: "Feeling Lucky!",
