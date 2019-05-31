@@ -6,7 +6,7 @@
 		"start": "node server.js -- --launch"
 	},
 	"dependencies": {
-		"axios": "^0.18.0",
+		"axios": "^0.19.0",
 		"body-parser": "^1.19.0",
 		"date-time": "^3.1.0",
 		"dotenv": "^8.0.0",
