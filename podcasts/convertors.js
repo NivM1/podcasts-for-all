@@ -2,6 +2,7 @@ const logger = require("../common/logger");
 const constants = require("../common/const");
 const podcastsData = require("./podcastsDataFetcher");
 const genresData = require("./genresDataFetcher");
+const convertorsItunes = require("./convertorsItunes");
 
 // All functions that convert podcast or episode object to Stremio object
 function episodeToVideo(episode, episodeNumber) {
@@ -42,7 +43,6 @@ function episodesToVideos(episodes) {
 }
 
 async function podcastToSeries(podcast, origin) {
-    //logger.debug(constants.LOG_MESSAGES.START_CONVERT_PODCAST_TO_SERIES + podcast.id, constants.HANDLERS.CONVERTOR, constants.API_CONSTANTS.TYPES.PODCAST, null, 1, podcast);
 
     let released = "";
     if (podcast.earliest_pub_date_ms) released = (new Date(podcast.earliest_pub_date_ms)).toISOString();
@@ -84,7 +84,6 @@ async function podcastToSeries(podcast, origin) {
         };
     }
 
-
     if (podcast.earliest_pub_date_ms || podcast.latest_pub_date_ms) {
         series.releaseInfo = generateReleaseInfo(podcast.earliest_pub_date_ms, podcast.latest_pub_date_ms)
     }
@@ -95,7 +94,18 @@ async function podcastToSeries(podcast, origin) {
         series.genres = genresData.getGenresStringsFromArray(podcast.genre_ids);
 
         const allEpisodes = await podcastsData.getAllEpisodesForPodcast(podcast);
-        let episodesAsVideos = episodesToVideos(allEpisodes);
+
+        let episodesAsVideos = {};
+        if (process.env.USE_ITUNES == "true"){
+
+            episodesAsVideos = convertorsItunes.episodesToVideos(convertorsItunes.fixJsons(allEpisodes));
+            episodesAsVideos.asArray = convertorsItunes.addPodcastIdToItunesEpisodes(episodesAsVideos.asArray, podcast.id);
+        }
+        else {
+
+            episodesAsVideos = episodesToVideos(allEpisodes);
+        }
+        
         series.videos = episodesAsVideos.asArray;
 
         // Adds extra field on the series (the episodes / videos by id)

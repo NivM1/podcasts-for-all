@@ -1,6 +1,7 @@
 const logger = require("../common/logger");
 const constants = require("../common/const");
 const podcastsApi = require("../common/podcastsApi");
+const podcastsApiItunes = require("../common/podcastsApiItunes");
 
 async function getBestPodcasts(skip, genreId, region) {
 
@@ -100,17 +101,24 @@ async function getEpisodeById(id) {
 }
 
 async function getAllEpisodesForPodcast(podcast) {
-    const episodes = [];
-    episodes.push(...podcast.episodes);
-    let nextEpisodePubDate = podcast.next_episode_pub_date;
+    let episodes = [];
 
-    while (nextEpisodePubDate) {
-        const results = await getPodcastById(podcast.id, {
-            next_episode_pub_date: nextEpisodePubDate,
-        });
-
-        nextEpisodePubDate = results.next_episode_pub_date;
-        episodes.push(...results.episodes)
+    if (process.env.USE_ITUNES == "true"){
+    
+        episodes = await podcastsApiItunes.getEpisodesByPodcastId(podcast.itunes_id);      
+    }
+    else {
+        episodes.push(...podcast.episodes);
+        let nextEpisodePubDate = podcast.next_episode_pub_date;
+    
+        while (nextEpisodePubDate) {
+            const results = await getPodcastById(podcast.id, {
+                next_episode_pub_date: nextEpisodePubDate,
+            });
+    
+            nextEpisodePubDate = results.next_episode_pub_date;
+            episodes.push(...results.episodes)
+        }
     }
 
     return episodes.reverse();

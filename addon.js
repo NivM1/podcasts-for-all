@@ -14,6 +14,8 @@ const podcastsData = require("./podcasts/podcastsDataFetcher");
 const genresData = require("./podcasts/genresDataFetcher");
 const countriesData = require("./podcasts/countriesDataFetcher");
 const manifest = require('./manifest');
+const convertorsItunes = require("./podcasts/convertorsItunes");
+const podcastsApiItunes = require("./common/podcastsApiItunes");
 
 logger.info(constants.LOG_MESSAGES.START_ADDON + " Version: " + process.env.VERSION);
 
@@ -130,7 +132,23 @@ builder.defineStreamHandler(async ({
 
 	id = id.replace(constants.ID_PREFIX, "");
 
-	const episode = await podcastsData.getEpisodeById(id);
+	let episode = {};
+
+	if (process.env.USE_ITUNES == "true"){
+
+		// When using itunes the id is itunesEpisodeId|listennotesPodcastId
+		let idParts = id.split("|");
+		const podcast = await podcastsData.getPodcastById(idParts[1]);
+		var a= await podcastsApiItunes.getEpisodesByPodcastId(podcast.itunes_id)
+		var b = convertorsItunes.episodesToVideos(a).asArray
+		episode = podcastsApiItunes.getEpisodeFromVideos(b, constants.ID_PREFIX + idParts[0]);
+		episode.podcast = podcast;
+	}
+	else {
+
+		episode = await podcastsData.getEpisodeById(id);
+	}
+
 	return {
 		streams: convertors.getStreamsFromEpisode(episode)
 	};

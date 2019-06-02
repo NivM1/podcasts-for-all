@@ -1,7 +1,6 @@
 const constants = require("../common/const");
 const axios = require('axios');
 
-
 // Podcast api docs https://www.listennotes.com/api/docs/
 const apiInstance = axios.create({
     baseURL: constants.PODCASTS_DATA_BASE_API_URL,

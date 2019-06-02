@@ -39,6 +39,7 @@ const LOG_MESSAGES = {
 };
 
 const PODCASTS_DATA_BASE_API_URL = "https://listen-api.listennotes.com";
+const PODCASTS_DATA_BASE_API_URL_ITUNES = "https://itunes.apple.com";
 
 const PODCASTS_DATA_API_ROUTES = {
     SEARCH: "/api/v2/search",
@@ -47,6 +48,11 @@ const PODCASTS_DATA_API_ROUTES = {
     BEST_PODCASTS: "/api/v2/best_podcasts",
     GENRES: "/api/v2/genres",
     FEELING_LUCKY: "/api/v2/just_listen"
+};
+
+const ITUNES_DATA_API_ROUTES = {
+    SEARCH: "/search",
+    LOOKUP: "/lookup"
 };
 
 const PODCASTS_API_KEY = {
@@ -133,7 +139,8 @@ const API_CONSTANTS = {
     },
     FACEBOOK_BASE_URL: "https://www.facebook.com/",
     TWITTER_BASE_URL: "https://www.twitter.com/",
-    INSTAGRAM_BASE_URL: "https://www.instagram.com/"
+    INSTAGRAM_BASE_URL: "https://www.instagram.com/",
+    ITUNES_LIMIT_RESULTS: 20
 };
 
 const PODCAST_TYPE = {
@@ -147,7 +154,9 @@ module.exports = {
     LOG_LEVEL,
     LOG_MESSAGES,
     PODCASTS_DATA_BASE_API_URL,
+    PODCASTS_DATA_BASE_API_URL_ITUNES,
     PODCASTS_DATA_API_ROUTES,
+    ITUNES_DATA_API_ROUTES,
     PODCASTS_API_KEY,
     API_CONSTANTS,
     ID_PREFIX,

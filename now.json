@@ -16,7 +16,8 @@
         "LOGGER_TOKEN": "@logger_token",
         "LOGGER_HOST": "listener.logz.io",
         "LOGGER_SUPRESS_ERRORS": "false",
-        "LOGGER_INCLUDE_DEBUG": "false"
+        "LOGGER_INCLUDE_DEBUG": "false",
+        "USE_ITUNES": "true"
     },
     "github": {
         "silent": true

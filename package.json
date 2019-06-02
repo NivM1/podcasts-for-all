@@ -14,6 +14,7 @@
 		"log4js": "^4.1.1",
 		"logzio-nodejs": "^1.0.5",
 		"stremio-addon-sdk": "1.1.x",
-		"unirest": "^0.6.0"
+		"unirest": "^0.6.0",
+		"xml-js": "^1.6.11"
 	}
 }
