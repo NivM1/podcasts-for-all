@@ -85,7 +85,7 @@ builder.defineCatalogHandler(async ({
 		if (extra.search.toLowerCase().includes(constants.SEARCH_PREFIX)){
 
 			const fixedSearchTerm = extra.search.split(constants.SEARCH_PREFIX)[1];
-			logger.info(constants.LOG_MESSAGES.SEARCH_ON_CATALOG_HANDLER + extra.search, constants.HANDLERS.CATALOG, constants.CATALOGS.SEARCH.NAME, extra.search.toLowerCase(), null, {
+			logger.info(constants.LOG_MESSAGES.SEARCH_ON_CATALOG_HANDLER_FOR_PODCAST + fixedSearchTerm, constants.HANDLERS.CATALOG, constants.CATALOGS.SEARCH.NAME, extra.search.toLowerCase(), null, {
 				search: fixedSearchTerm.toLowerCase()
 			});
 	
@@ -93,6 +93,10 @@ builder.defineCatalogHandler(async ({
 			Serieses = await convertors.podcastsToSerieses(podcasts, constants.PODCAST_TYPE.SEARCH);
 		}
 		else {
+
+			logger.info(constants.LOG_MESSAGES.SEARCH_ON_CATALOG_HANDLER + extra.search, constants.HANDLERS.CATALOG, constants.CATALOGS.SEARCH.NAME, extra.search.toLowerCase(), null, {
+				search: fixedSearchTerm.toLowerCase()
+			});
 
 			// Shows instructions if the search format was not used
 			Serieses.asArray = searchHelper;

@@ -29,6 +29,7 @@ const LOG_MESSAGES = {
     ERROR_FEELING_LUCKY: "Error- get feeling lucky! Error: ",
     START_CATALOG_HANDLER: "Handler: Catalog | ",
     SEARCH_ON_CATALOG_HANDLER: "Search available: ",
+    SEARCH_ON_CATALOG_HANDLER_FOR_PODCAST: "Search available for podcast: ",
     START_SUBTITLE_HANDLER: "SUBTITLE: Subtitle | ",
     START_META_HANDLER: "Handler: Meta | ",
     START_STREAM_HANDLER: "Handler: Stream | ",
