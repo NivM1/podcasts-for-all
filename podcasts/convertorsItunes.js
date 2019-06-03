@@ -88,7 +88,7 @@ function generateAwards(explicit_content) {
     return (awards);
 };
 
-/* async function podcastToSeries(podcast) {
+async function podcastToSeries(podcast) {
 
     let released = "";
     if (podcast.releaseDate) released = podcast.releaseDate;
@@ -138,12 +138,21 @@ function generateAwards(explicit_content) {
     }
 
     return series;
-}; */
+};
 
-/* async function podcastsToSerieses(podcasts, origin) {
+async function podcastsToSerieses(podcasts, origin) {
 
+    let serieses = []
+
+    for (let i = 0; i < podcasts.length; i++){
+
+        let series = await podcastToSeries(podcasts[i]);
+        serieses.push(series);
+    }
+
+    return (serieses);
 }
-
+/*
 function generateReleaseInfo(oldestEpisodeTime, newestEpisodeTime) {
 
     return releaseInfo;
@@ -156,5 +165,6 @@ function podcastToSeriesVideo(podcast) {
 module.exports = {
     episodesToVideos,
     addPodcastIdToItunesEpisodes,
-    fixJsons
+    fixJsons,
+    podcastsToSerieses
 };

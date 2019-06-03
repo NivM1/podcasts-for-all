@@ -58,8 +58,16 @@ builder.defineCatalogHandler(async ({
 		logger.info(constants.CATALOGS.BY_MOOD.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_MOOD.NAME, extra.genre);
 
 		let Serieses = [];
-		const podcasts = await podcastsData.searchPodcasts(extra.genre, null, null, true);
-		Serieses = await convertors.podcastsToSerieses(podcasts, constants.PODCAST_TYPE.SEARCH);
+
+		/* if (process.env.USE_ITUNES == "true"){
+
+			const podcasts = await convertorsItunes.podcastsToSerieses(await podcastsApiItunes.search(extra.genre));
+		} */
+/* 		else { */
+
+			const podcasts = await podcastsData.searchPodcasts(extra.genre, null, null, true);
+			Serieses = await convertors.podcastsToSerieses(podcasts, constants.PODCAST_TYPE.SEARCH);
+		/* } */
 
 		return {
 			metas: Serieses.asArray

@@ -11,10 +11,12 @@ const apiInstanceItunes = axios.create({
 async function search(term, limit) {
 
     if (!limit) limit = constants.API_CONSTANTS.ITUNES_LIMIT_RESULTS;
-    const result = await apiInstanceItunes.get(constants.ITUNES_DATA_API_ROUTES.SEARCH, {
+    
+    const result = await apiInstanceItunes.get(constants.ITUNES_DATA_API_ROUTES.SEARCH, {params:{
         term: term,
-        limit: limit
-    });
+        limit: limit,
+        media: "podcast"
+    }});
 
     return (result.data.results);
 }

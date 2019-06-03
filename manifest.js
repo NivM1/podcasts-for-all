@@ -37,14 +37,14 @@ module.exports = {
             name: constants.CATALOGS.BY_TREND.NAME,
             genres: trends.sort(),
             extraSupported: ['genre', 'skip']
-        },
+        }/* ,
         {
             type: constants.CATALOGS.TYPE,
             id: constants.CATALOGS.FEELING_LUCKY.ID,
             name: constants.CATALOGS.FEELING_LUCKY.NAME,
             genres: constants.CATALOGS.FEELING_LUCKY.GENRES,
             extraSupported: ['genre', 'skip']
-        }
+        } */
     ],
     resources: [
         "catalog",
