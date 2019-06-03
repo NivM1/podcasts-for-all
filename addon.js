@@ -137,13 +137,13 @@ builder.defineStreamHandler(async ({
 	if (process.env.USE_ITUNES == "true"){
 
 		logger.info(constants.LOG_MESSAGES.USING_ITUNES_STRAEM_HANDLER);
-		
+
 		// When using itunes the id is itunesEpisodeId|listennotesPodcastId
 		let idParts = id.split("|");
 		const podcast = await podcastsData.getPodcastById(idParts[1]);
-		var a= await podcastsApiItunes.getEpisodesByPodcastId(podcast.itunes_id)
-		var b = convertorsItunes.episodesToVideos(a).asArray
-		episode = podcastsApiItunes.getEpisodeFromVideos(b, constants.ID_PREFIX + idParts[0]);
+		var itunesEpisodes= await podcastsApiItunes.getEpisodesByPodcastId(podcast.itunes_id)
+		var itunesVideos = convertorsItunes.episodesToVideos(itunesEpisodes).asArray
+		episode = podcastsApiItunes.getEpisodeFromVideos(itunesVideos, constants.ID_PREFIX + idParts[0]);
 		episode.podcast = podcast;
 	}
 	else {

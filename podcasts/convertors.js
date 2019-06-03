@@ -93,10 +93,13 @@ async function podcastToSeries(podcast, origin) {
         series.runtime = "Last episode length: " + (podcast.episodes[0].audio_length_sec / 60).toFixed(0) + " min     | ";
         series.genres = genresData.getGenresStringsFromArray(podcast.genre_ids);
 
-        const allEpisodes = await podcastsData.getAllEpisodesForPodcast(podcast);
+        let itunesFlag = true;
+        if (!podcast.itunes_id) itunesFlag = false;
+
+        const allEpisodes = await podcastsData.getAllEpisodesForPodcast(podcast, itunesFlag);
 
         let episodesAsVideos = {};
-        if (process.env.USE_ITUNES == "true"){
+        if (process.env.USE_ITUNES == "true" && itunesFlag){
 
             episodesAsVideos = convertorsItunes.episodesToVideos(convertorsItunes.fixJsons(allEpisodes));
             episodesAsVideos.asArray = convertorsItunes.addPodcastIdToItunesEpisodes(episodesAsVideos.asArray, podcast.id);

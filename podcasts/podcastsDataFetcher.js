@@ -100,10 +100,10 @@ async function getEpisodeById(id) {
     }
 }
 
-async function getAllEpisodesForPodcast(podcast) {
+async function getAllEpisodesForPodcast(podcast, itunesFlag) {
     let episodes = [];
 
-    if (process.env.USE_ITUNES == "true"){
+    if (process.env.USE_ITUNES == "true" && itunesFlag){
         
 		logger.info(constants.LOG_MESSAGES.USING_ITUNES_GET_EPISODES);
     

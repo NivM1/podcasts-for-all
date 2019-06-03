@@ -44,7 +44,7 @@ function episodeToVideo(episode, episodeNumber) {
         title: episode.title._text,
         //released: (new Date(episode.pubDate._text)).toISOString(),
         released: episode.pubDate._text,
-        thumbnail: episode.itunes_image._attributes.href,
+        thumbnail: (episode.itunes_image ? episode.itunes_image._attributes.href : constants.ADDON_BACKGROUND),
         streams: [{
             url: episode.enclosure._attributes.url
         }],
