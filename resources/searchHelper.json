@@ -10,7 +10,7 @@
 {
     "id": "pd1",
     "type": "series",
-    "name": "use this format:",
+    "name": "use this format ->",
     "poster": "https://github.com/NivM1/podcasts-for-all/blob/master/static/searchBackground/second.png?raw=true",
     "posterShape": "regular",
     "logo": "https://github.com/NivM1/podcasts-for-all/blob/master/static/addon_logo.png?raw=true",
