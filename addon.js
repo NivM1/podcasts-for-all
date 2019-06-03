@@ -136,6 +136,8 @@ builder.defineStreamHandler(async ({
 
 	if (process.env.USE_ITUNES == "true"){
 
+		logger.info(constants.LOG_MESSAGES.USING_ITUNES_STRAEM_HANDLER);
+		
 		// When using itunes the id is itunesEpisodeId|listennotesPodcastId
 		let idParts = id.split("|");
 		const podcast = await podcastsData.getPodcastById(idParts[1]);

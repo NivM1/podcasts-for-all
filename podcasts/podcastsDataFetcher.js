@@ -104,6 +104,8 @@ async function getAllEpisodesForPodcast(podcast) {
     let episodes = [];
 
     if (process.env.USE_ITUNES == "true"){
+        
+		logger.info(constants.LOG_MESSAGES.USING_ITUNES_GET_EPISODES);
     
         episodes = await podcastsApiItunes.getEpisodesByPodcastId(podcast.itunes_id);      
     }

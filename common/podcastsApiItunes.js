@@ -46,6 +46,10 @@ async function getEpisodesByPodcastId(id) {
     const podcast = await getPodcastById(id);
     const episodes = await getEpisodesFromFeed(podcast.feedUrl);
 
+    if (episodes.rss.channel.item.length == 0){
+        logger.info(constants.LOG_MESSAGES.ZERO_RESULTS_EPISODES_ITUNES + id);
+    }
+
     return (episodes.rss.channel.item);
 }
 

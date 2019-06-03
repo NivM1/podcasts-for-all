@@ -88,10 +88,6 @@ function generateAwards(explicit_content) {
     return (awards);
 };
 
-function getPodcastImages(podcast) {
-
-};
-
 /* async function podcastToSeries(podcast) {
 
     let released = "";

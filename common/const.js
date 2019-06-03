@@ -35,7 +35,10 @@ const LOG_MESSAGES = {
     START_FEELING_LUCKY: "Start get feeling lucky",
     ON_GOING_HANDLE_WITH_PROMISES: "Not all promises 'getPodcastById' completed yet. More to go: ",
     END_HANDLE_WITH_PROMISES: "All promises handled: ",
-    INIT_GENRES_BY_ID_OBJECT: "Done! Create genres object. Num of genres: "
+    INIT_GENRES_BY_ID_OBJECT: "Done! Create genres object. Num of genres: ",
+    USING_ITUNES_STRAEM_HANDLER: "Using itunes for stream handler",
+    USING_ITUNES_GET_EPISODES: "Using itunes for meta handler",
+    ZERO_RESULTS_EPISODES_ITUNES: "Itunes return 0 result on episodes: "
 };
 
 const PODCASTS_DATA_BASE_API_URL = "https://listen-api.listennotes.com";
