@@ -99,7 +99,7 @@ async function podcastToSeries(podcast, origin) {
         const allEpisodes = await podcastsData.getAllEpisodesForPodcast(podcast, itunesFlag);
 
         let episodesAsVideos = {};
-        if (process.env.USE_ITUNES == "true" && itunesFlag){
+        if (process.env.USE_ITUNES === "true" && itunesFlag){
 
             episodesAsVideos = convertorsItunes.episodesToVideos(convertorsItunes.fixJsons(allEpisodes));
             episodesAsVideos.asArray = convertorsItunes.addPodcastIdToItunesEpisodes(episodesAsVideos.asArray, podcast.id);
