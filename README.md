@@ -10,7 +10,8 @@
 <p align="center">
   <a href="https://paypal.me/doron050">
     <img src="https://img.shields.io/badge/$-donate-ff69b4.svg?maxAge=2592000&amp;style=flat">
-  </a>
+  </a><br/>
+  Winner of the [Stremio Add-On Competition 2019](https://blog.stremio.com/add-on-competition-2019-winners/) :trophy:
 </p> 
 
 <p align="center">
