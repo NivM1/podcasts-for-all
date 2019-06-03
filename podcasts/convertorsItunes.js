@@ -98,10 +98,30 @@ async function podcastToSeries(podcast) {
     let smallImg;
     let largeImg;
     if (podcast.artworkUrl100) smallImg = podcast.artworkUrl100
-    if (podcast.artworkUrl160) bigImg = podcast.artworkUrl160
+    if (podcast.artworkUrl160) largeImg = podcast.artworkUrl160
+
+    if (!podcast.artworkUrl160) {
+        largeImg = smallImg;
+    }
 
     let series = {};
-    if (origin === constants.PODCAST_TYPE.SEARCH) {
+    // if (origin === constants.PODCAST_TYPE.SEARCH) {
+    //     series = {
+    //         id: constants.ID_PREFIX + podcast.collectionId,
+    //         type: "series",
+    //         name: podcast.collectionName,
+    //         poster: smallImg,
+    //         genres: podcast.genres,
+    //         posterShape: "regular",
+    //         background: bigImg,
+    //         logo: constants.ADDON_LOGO,
+    //         //description: podcast.description_original,
+    //         director: [podcast.artistName],
+    //         released: released,
+    //         inTheaters: true,
+    //     };
+    // }
+    // else {
         series = {
             id: constants.ID_PREFIX + podcast.collectionId,
             type: "series",
@@ -109,23 +129,8 @@ async function podcastToSeries(podcast) {
             poster: smallImg,
             genres: podcast.genres,
             posterShape: "regular",
-            background: bigImg,
+            background: largeImg,
             logo: constants.ADDON_LOGO,
-            //description: podcast.description_original,
-            director: [podcast.artistName],
-            released: released,
-            inTheaters: true,
-        };
-    } else {
-        series = {
-            id: constants.ID_PREFIX + podcast.collectionId,
-            type: "series",
-            name: podcast.collectionName,
-            //poster: podcast.thumbnail,
-            genres: podcast.genres,
-            //posterShape: "regular",
-            //background: podcast.image,
-            //logo: constants.ADDON_LOGO,
             //description: podcast.description,
             director: [podcast.artistName],
             released: released,
@@ -135,7 +140,7 @@ async function podcastToSeries(podcast) {
             awards: generateAwards(podcast.collectionExplicitness),
             website: podcast.collectionViewUrl
         };
-    }
+    // }
 
     return series;
 };
