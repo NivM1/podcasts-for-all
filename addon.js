@@ -16,6 +16,7 @@ const countriesData = require("./podcasts/countriesDataFetcher");
 const manifest = require('./manifest');
 const convertorsItunes = require("./podcasts/convertorsItunes");
 const podcastsApiItunes = require("./common/podcastsApiItunes");
+const searchHelper = require("./resources/searchHelper");
 
 logger.info(constants.LOG_MESSAGES.START_ADDON + " Version: " + process.env.VERSION);
 
@@ -78,15 +79,24 @@ builder.defineCatalogHandler(async ({
 
 	// If there is active search using search api instead of best podcasts api
 	if (extra.search) {
-
+		
 		let Serieses = [];
 
-		logger.info(constants.LOG_MESSAGES.SEARCH_ON_CATALOG_HANDLER + extra.search, constants.HANDLERS.CATALOG, constants.CATALOGS.SEARCH.NAME, extra.search.toLowerCase(), null, {
-			search: extra.search.toLowerCase()
-		});
+		if (extra.search.toLowerCase().includes(constants.SEARCH_PREFIX)){
 
-		const podcasts = await podcastsData.searchPodcasts(extra.search);
-		Serieses = await convertors.podcastsToSerieses(podcasts, constants.PODCAST_TYPE.SEARCH);
+			const fixedSearchTerm = extra.search.split(constants.SEARCH_PREFIX)[1];
+			logger.info(constants.LOG_MESSAGES.SEARCH_ON_CATALOG_HANDLER + extra.search, constants.HANDLERS.CATALOG, constants.CATALOGS.SEARCH.NAME, extra.search.toLowerCase(), null, {
+				search: fixedSearchTerm.toLowerCase()
+			});
+	
+			const podcasts = await podcastsData.searchPodcasts(fixedSearchTerm);
+			Serieses = await convertors.podcastsToSerieses(podcasts, constants.PODCAST_TYPE.SEARCH);
+		}
+		else {
+
+			// Shows instructions if the search format was not used
+			Serieses.asArray = searchHelper;
+		}
 
 		return {
 			metas: Serieses.asArray

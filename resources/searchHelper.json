@@ -1,0 +1,37 @@
+[{
+    "id": "pd0",
+    "type": "series",
+    "name": "To search for podcast",
+    "poster": "https://github.com/NivM1/podcasts-for-all/blob/master/static/searchBackground/first.png?raw=true",
+    "posterShape": "regular",
+    "logo": "https://github.com/NivM1/podcasts-for-all/blob/master/static/addon_logo.png?raw=true",
+    "description": "To search for a podcast, Try this search format: podcast: [your search term]"
+},
+{
+    "id": "pd1",
+    "type": "series",
+    "name": "use this format:",
+    "poster": "https://github.com/NivM1/podcasts-for-all/blob/master/static/searchBackground/second.png?raw=true",
+    "posterShape": "regular",
+    "logo": "https://github.com/NivM1/podcasts-for-all/blob/master/static/addon_logo.png?raw=true",
+    "description": "To search for a podcast, Try this search format: podcast: [your search term]"
+},
+{
+    "id": "pd2",
+    "type": "series",
+    "name": "podcast:",
+    "poster": "https://github.com/NivM1/podcasts-for-all/blob/master/static/searchBackground/third.png?raw=true",
+    "posterShape": "regular",
+    "logo": "https://github.com/NivM1/podcasts-for-all/blob/master/static/addon_logo.png?raw=true",
+    "description": "To search for a podcast, Try this search format: podcast: [your search term]"
+},
+{
+    "id": "pd3",
+    "type": "series",
+    "name": "your search term",
+    "poster": "https://github.com/NivM1/podcasts-for-all/blob/master/static/searchBackground/forth.png?raw=true",
+    "posterShape": "regular",
+    "logo": "https://github.com/NivM1/podcasts-for-all/blob/master/static/addon_logo.png?raw=true",
+    "description": "To search for a podcast, Try this search format: podcast: [your search term]"
+}
+]

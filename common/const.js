@@ -150,6 +150,8 @@ const PODCAST_TYPE = {
     SEARCH: 'SEARCH'
 };
 
+const SEARCH_PREFIX = "podcast:"
+
 module.exports = {
     PODCAST_TYPE,
     CATALOGS,
@@ -165,5 +167,6 @@ module.exports = {
     ID_PREFIX,
     CONTACT_EMAIL,
     ADDON_LOGO,
-    ADDON_BACKGROUND
+    ADDON_BACKGROUND,
+    SEARCH_PREFIX
 };
