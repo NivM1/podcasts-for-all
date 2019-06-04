@@ -84,7 +84,7 @@ builder.defineCatalogHandler(async ({
             };
         } else {
             const podcasts = await podcastsApiItunes.search("top");
-            Serieses = await convertorsItunes.podcastsToSerieses(podcasts);
+            Serieses = await convertorsItunes.podcastsToSerieses(podcasts, "catalog");
         }
 
         return {
