@@ -67,7 +67,7 @@ builder.defineCatalogHandler(async ({
                     search: fixedSearchTerm.toLowerCase()
                 });
 
-                const podcasts = await podcastsApiItunes.search(extra.genre);
+                const podcasts = await podcastsApiItunes.search(fixedSearchTerm);
                 Serieses.asArray = await convertorsItunes.podcastsToSerieses(podcasts, constants.HANDLERS.CATALOG.toLowerCase());
             } else {
 
