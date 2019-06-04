@@ -31,7 +31,7 @@ builder.defineCatalogHandler(async ({
                                     }) => {
 
     const a = false;
-    if (process.env.USE_ITUNES === "true" && a === false) {
+    if (process.env.USE_ITUNES === "true" && a === true) {
         let Serieses = [];
 
         if (extra.genre && id === constants.CATALOGS.BY_GENRE.ID) {
