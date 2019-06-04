@@ -30,33 +30,33 @@ builder.defineCatalogHandler(async ({
                                         extra
                                     }) => {
 
-    const a = false;
-    if (process.env.USE_ITUNES === "true" && a === true) {
+
+    if (process.env.USE_ITUNES === "true") {
         let Serieses = [];
 
         if (extra.genre && id === constants.CATALOGS.BY_GENRE.ID) {
             logger.info(constants.CATALOGS.BY_GENRE.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_GENRE.NAME, extra.genre);
 
             const podcasts = await podcastsApiItunes.search(extra.genre);
-            Serieses = await convertorsItunes.podcastsToSerieses(podcasts);
+            Serieses = await convertorsItunes.podcastsToSerieses(podcasts, "catalog");
 
         } else if (extra.genre && id === constants.CATALOGS.BY_COUNTRY.ID) {
             logger.info(constants.CATALOGS.BY_COUNTRY.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_COUNTRY.NAME, extra.genre);
 
             const podcasts = await podcastsApiItunes.search(extra.genre);
-            Serieses = await convertorsItunes.podcastsToSerieses(podcasts);
+            Serieses = await convertorsItunes.podcastsToSerieses(podcasts, "catalog");
 
         } else if (extra.genre && id === constants.CATALOGS.BY_MOOD.ID) {
             logger.info(constants.CATALOGS.BY_MOOD.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_MOOD.NAME, extra.genre);
 
             const podcasts = await podcastsApiItunes.search(extra.genre);
-            Serieses = await convertorsItunes.podcastsToSerieses(podcasts);
+            Serieses = await convertorsItunes.podcastsToSerieses(podcasts, "catalog");
 
         } else if (extra.genre && id === constants.CATALOGS.BY_TREND.ID) {
             logger.info(constants.CATALOGS.BY_TREND.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_TREND.NAME, extra.genre);
 
             const podcasts = await podcastsApiItunes.search(extra.genre);
-            Serieses = await convertorsItunes.podcastsToSerieses(podcasts);
+            Serieses = await convertorsItunes.podcastsToSerieses(podcasts, "catalog");
 
         } else if (extra.search) {
             let Serieses = [];
