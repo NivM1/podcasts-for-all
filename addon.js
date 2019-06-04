@@ -22,6 +22,8 @@ logger.info(constants.LOG_MESSAGES.START_ADDON + " Version: " + process.env.VERS
 
 const builder = new addonBuilder(manifest);
 
+let topSearch;
+
 // Addon handlers
 // Docs: https://github.com/Stremio/stremio-addon-sdk/blob/master/docs/api/requests/defineCatalogHandler.md
 builder.defineCatalogHandler(async ({
@@ -83,8 +85,18 @@ builder.defineCatalogHandler(async ({
                 metas: Serieses.asArray
             };
         } else {
-            const podcasts = await podcastsApiItunes.search("top");
-            Serieses = await convertorsItunes.podcastsToSerieses(podcasts,  constants.HANDLERS.CATALOG.toLowerCase());
+            if (!topSearch) {
+                logger.info('take top from new');
+                const podcasts = await podcastsApiItunes.search("top");
+                Serieses = await convertorsItunes.podcastsToSerieses(podcasts,  constants.HANDLERS.CATALOG.toLowerCase());
+
+                topSearch = Serieses;
+            }
+            else {
+                logger.info('take top from cache');
+                Serieses = topSearch;
+            }
+
         }
 
         return {
