@@ -38,25 +38,25 @@ builder.defineCatalogHandler(async ({
             logger.info(constants.CATALOGS.BY_GENRE.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_GENRE.NAME, extra.genre);
 
             const podcasts = await podcastsApiItunes.search(extra.genre);
-            Serieses = await convertorsItunes.podcastsToSerieses(podcasts, "catalog");
+            Serieses = await convertorsItunes.podcastsToSerieses(podcasts, constants.HANDLERS.CATALOG.toLowerCase());
 
         } else if (extra.genre && id === constants.CATALOGS.BY_COUNTRY.ID) {
             logger.info(constants.CATALOGS.BY_COUNTRY.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_COUNTRY.NAME, extra.genre);
 
             const podcasts = await podcastsApiItunes.search(extra.genre);
-            Serieses = await convertorsItunes.podcastsToSerieses(podcasts, "catalog");
+            Serieses = await convertorsItunes.podcastsToSerieses(podcasts, constants.HANDLERS.CATALOG.toLowerCase());
 
         } else if (extra.genre && id === constants.CATALOGS.BY_MOOD.ID) {
             logger.info(constants.CATALOGS.BY_MOOD.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_MOOD.NAME, extra.genre);
 
             const podcasts = await podcastsApiItunes.search(extra.genre);
-            Serieses = await convertorsItunes.podcastsToSerieses(podcasts, "catalog");
+            Serieses = await convertorsItunes.podcastsToSerieses(podcasts, constants.HANDLERS.CATALOG.toLowerCase());
 
         } else if (extra.genre && id === constants.CATALOGS.BY_TREND.ID) {
             logger.info(constants.CATALOGS.BY_TREND.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_TREND.NAME, extra.genre);
 
             const podcasts = await podcastsApiItunes.search(extra.genre);
-            Serieses = await convertorsItunes.podcastsToSerieses(podcasts, "catalog");
+            Serieses = await convertorsItunes.podcastsToSerieses(podcasts,  constants.HANDLERS.CATALOG.toLowerCase());
 
         } else if (extra.search) {
             let Serieses = [];
@@ -84,7 +84,7 @@ builder.defineCatalogHandler(async ({
             };
         } else {
             const podcasts = await podcastsApiItunes.search("top");
-            Serieses = await convertorsItunes.podcastsToSerieses(podcasts, "catalog");
+            Serieses = await convertorsItunes.podcastsToSerieses(podcasts,  constants.HANDLERS.CATALOG.toLowerCase());
         }
 
         return {
@@ -192,7 +192,7 @@ builder.defineMetaHandler(async ({
         logger.info("Podcast: " + podcast.collectionName + " | " + podcast.country + ": " + constants.HANDLERS.META, constants.API_CONSTANTS.TYPES.PODCAST, null, 1, podcast);
 
         return {
-            meta: await convertorsItunes.podcastToSeries(podcast, "meta"),
+            meta: await convertorsItunes.podcastToSeries(podcast, constants.HANDLERS.META.toLowerCase()),
             video: convertorsItunes.podcastToSeriesVideo(podcast)
         };
     } else {
