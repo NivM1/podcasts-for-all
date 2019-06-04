@@ -68,7 +68,7 @@ builder.defineCatalogHandler(async ({
                 });
 
                 const podcasts = await podcastsApiItunes.search(extra.genre);
-                Serieses = await convertorsItunes.podcastsToSerieses(podcasts);
+                Serieses = await convertorsItunes.podcastsToSerieses(podcasts, constants.HANDLERS.CATALOG.toLowerCase());
             } else {
 
                 logger.info(constants.LOG_MESSAGES.SEARCH_ON_CATALOG_HANDLER + extra.search, constants.HANDLERS.CATALOG, constants.CATALOGS.SEARCH.NAME, extra.search.toLowerCase(), null, {
@@ -76,7 +76,7 @@ builder.defineCatalogHandler(async ({
                 });
 
                 // Shows instructions if the search format was not used
-                Serieses.asArray = searchHelper;
+                Serieses = searchHelper;
             }
 
             return {
