@@ -72,7 +72,7 @@ builder.defineCatalogHandler(async ({
             } else {
 
                 logger.info(constants.LOG_MESSAGES.SEARCH_ON_CATALOG_HANDLER + extra.search, constants.HANDLERS.CATALOG, constants.CATALOGS.SEARCH.NAME, extra.search.toLowerCase(), null, {
-                    search: fixedSearchTerm.toLowerCase()
+                    search: extra.search.toLowerCase()
                 });
 
                 // Shows instructions if the search format was not used
