@@ -48,7 +48,7 @@ async function getEpisodesByPodcastId(id) {
     const podcast = await getPodcastById(id);
     const episodes = await getEpisodesFromFeed(podcast.feedUrl);
 
-    if (episodes.rss.channel.item.length == 0){
+    if (episodes.rss.channel.item.length === 0){
         logger.info(constants.LOG_MESSAGES.ZERO_RESULTS_EPISODES_ITUNES + id);
     }
 
@@ -63,7 +63,7 @@ function getEpisodeFromVideos(episodes, episodeId){
 
     while (!found && counter < episodes.length){
 
-        if (episodes[counter].id == episodeId){
+        if (episodes[counter].id === episodeId){
 
             episode = episodes[counter];
             found = true;

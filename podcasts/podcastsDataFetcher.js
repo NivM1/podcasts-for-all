@@ -143,7 +143,7 @@ async function getFeelingLucky() {
 
 function logListenNoteErrors(operation, e) {
 
-    if (!process.env.USE_ITUNES == "true"){
+    if (!process.env.USE_ITUNES === "true"){
     if (e.responce.status === 401) {
         logger.error('on ' + operation + ' we got error code 401 - wrong api key or your account is suspended.\n exception detail:' + e);
     } else if (e.responce.status === 404) {
