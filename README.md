@@ -55,7 +55,6 @@
   * Social Platforms refrences (Facebook, Spotify and more)
 * Stream HQ audio right to your device :headphones:
   * Cast the podcast to available devices
-* Powered by LISTEN NOTES API
 
 #### Screenshot - Main Podcasts Catalog:
 ![Podcasts Catalog](https://github.com/NivM1/podcasts-for-all/blob/master/static/podcast_for_all_screen.jpg)
