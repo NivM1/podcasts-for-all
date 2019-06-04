@@ -3,7 +3,7 @@
       {
         "id": 139,
         "parent_id": 127,
-        "name": "VR & AR"
+        "name": "VR AR"
       },
       {
         "id": 140,
@@ -59,16 +59,6 @@
         "id": 138,
         "parent_id": 68,
         "name": "Movie"
-      },
-      {
-        "id": 150,
-        "parent_id": 125,
-        "name": "Chinese History"
-      },
-      {
-        "id": 151,
-        "parent_id": 67,
-        "name": "Locally Focused"
       },
       {
         "id": 154,
@@ -199,11 +189,6 @@
         "id": 75,
         "parent_id": 69,
         "name": "Christianity"
-      },
-      {
-        "id": 76,
-        "parent_id": 69,
-        "name": "Hinduism"
       },
       {
         "id": 77,
@@ -383,7 +368,7 @@
       {
         "id": 117,
         "parent_id": 67,
-        "name": "Government & Organizations"
+        "name": "Government"
       },
       {
         "id": 118,
@@ -434,11 +419,6 @@
         "id": 126,
         "parent_id": 122,
         "name": "Philosophy"
-      },
-      {
-        "id": 128,
-        "parent_id": 127,
-        "name": "Software How-To"
       },
       {
         "id": 129,

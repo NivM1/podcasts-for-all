@@ -144,7 +144,7 @@ const API_CONSTANTS = {
     FACEBOOK_BASE_URL: "https://www.facebook.com/",
     TWITTER_BASE_URL: "https://www.twitter.com/",
     INSTAGRAM_BASE_URL: "https://www.instagram.com/",
-    ITUNES_LIMIT_RESULTS: 20
+    ITUNES_LIMIT_RESULTS: 50
 };
 
 const PODCAST_TYPE = {
