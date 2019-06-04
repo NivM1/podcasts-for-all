@@ -57,23 +57,22 @@ builder.defineCatalogHandler(async ({
 	} else if (extra.genre && id === constants.CATALOGS.BY_MOOD.ID) {
 		logger.info(constants.CATALOGS.BY_MOOD.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_MOOD.NAME, extra.genre);
 
-		let Serieses = [];
+		let Serieses = {};
 
-		/* if (process.env.USE_ITUNES == "true"){
-
-			const podcasts = await convertorsItunes.podcastsToSerieses(await podcastsApiItunes.search(extra.genre));
-		} */
-/* 		else { */
+		if (process.env.USE_ITUNES == "true") {
+			const a = await podcastsApiItunes.search(extra.genre)
+			const podcasts = await convertorsItunes.podcastsToSerieses(a, "catalog");
+			Serieses.asArray = podcasts
+		} else {
 
 			const podcasts = await podcastsData.searchPodcasts(extra.genre, null, null, true);
 			Serieses = await convertors.podcastsToSerieses(podcasts, constants.PODCAST_TYPE.SEARCH);
-		/* } */
+		}
 
 		return {
 			metas: Serieses.asArray
 		};
-	} 
-	else if (extra.genre && id === constants.CATALOGS.BY_TREND.ID) {
+	} else if (extra.genre && id === constants.CATALOGS.BY_TREND.ID) {
 		logger.info(constants.CATALOGS.BY_TREND.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_TREND.NAME, extra.genre);
 
 		let Serieses = [];
@@ -87,20 +86,19 @@ builder.defineCatalogHandler(async ({
 
 	// If there is active search using search api instead of best podcasts api
 	if (extra.search) {
-		
+
 		let Serieses = [];
 
-		if (extra.search.toLowerCase().includes(constants.SEARCH_PREFIX)){
+		if (extra.search.toLowerCase().includes(constants.SEARCH_PREFIX)) {
 
 			const fixedSearchTerm = extra.search.split(constants.SEARCH_PREFIX)[1];
 			logger.info(constants.LOG_MESSAGES.SEARCH_ON_CATALOG_HANDLER_FOR_PODCAST + fixedSearchTerm, constants.HANDLERS.CATALOG, constants.CATALOGS.SEARCH.NAME, extra.search.toLowerCase(), null, {
 				search: fixedSearchTerm.toLowerCase()
 			});
-	
+
 			const podcasts = await podcastsData.searchPodcasts(fixedSearchTerm);
 			Serieses = await convertors.podcastsToSerieses(podcasts, constants.PODCAST_TYPE.SEARCH);
-		}
-		else {
+		} else {
 
 			logger.info(constants.LOG_MESSAGES.SEARCH_ON_CATALOG_HANDLER + extra.search, constants.HANDLERS.CATALOG, constants.CATALOGS.SEARCH.NAME, extra.search.toLowerCase(), null, {
 				search: fixedSearchTerm.toLowerCase()
@@ -132,14 +130,27 @@ builder.defineMetaHandler(async ({
 	logger.info(constants.LOG_MESSAGES.START_META_HANDLER + "(type: " + type + " & id: " + id + ")", constants.HANDLERS.META, constants.API_CONSTANTS.TYPES.PODCAST);
 	id = id.replace(constants.ID_PREFIX, "");
 
-	const podcast = await podcastsData.getPodcastById(id);
+	if (process.env.USE_ITUNES == "true") {
+		const podcast = await podcastsApiItunes.getPodcastById(id);
 
-	logger.info("Podcast: " + podcast.title + " | " + podcast.country + " | " + podcast.language, constants.HANDLERS.META, constants.API_CONSTANTS.TYPES.PODCAST, null, 1, podcast);
+		logger.info("Podcast: " + podcast.collectionName + " | " + podcast.country + ": " + constants.HANDLERS.META, constants.API_CONSTANTS.TYPES.PODCAST, null, 1, podcast);
 
-	return {
-		meta: await convertors.podcastToSeries(podcast),
-		video: convertors.podcastToSeriesVideo(podcast)
-	};
+		return {
+			meta: await convertorsItunes.podcastToSeries(podcast, "meta"),
+			video: convertorsItunes.podcastToSeriesVideo(podcast)
+		};
+	} else {
+		const podcast = await podcastsData.getPodcastById(id);
+
+		logger.info("Podcast: " + podcast.title + " | " + podcast.country + " | " + podcast.language, constants.HANDLERS.META, constants.API_CONSTANTS.TYPES.PODCAST, null, 1, podcast);
+
+		return {
+			meta: await convertors.podcastToSeries(podcast),
+			video: convertors.podcastToSeriesVideo(podcast)
+		};
+	}
+
+
 });
 
 // Docs: https://github.com/Stremio/stremio-addon-sdk/blob/master/docs/api/requests/defineStreamHandler.md
@@ -156,19 +167,20 @@ builder.defineStreamHandler(async ({
 
 	let episode = {};
 
-	if (process.env.USE_ITUNES === "true"){
+	if (process.env.USE_ITUNES === "true") {
 
 		logger.info(constants.LOG_MESSAGES.USING_ITUNES_STRAEM_HANDLER);
 
 		// When using itunes the id is itunesEpisodeId|listennotesPodcastId
 		let idParts = id.split("|");
-		const podcast = await podcastsData.getPodcastById(idParts[1]);
-		const itunesEpisodes = await podcastsApiItunes.getEpisodesByPodcastId(podcast.itunes_id);
+		let idParts2 = idParts[0].split("/");
+		//const podcast = await podcastsData.getPodcastById(idParts[1]);
+		const podcast = await podcastsApiItunes.getPodcastById(idParts[1]);
+		const itunesEpisodes = await podcastsApiItunes.getEpisodesByPodcastId(podcast.collectionId);
 		const itunesVideos = convertorsItunes.episodesToVideos(itunesEpisodes).asArray;
 		episode = podcastsApiItunes.getEpisodeFromVideos(itunesVideos, constants.ID_PREFIX + idParts[0]);
 		episode.podcast = podcast;
-	}
-	else {
+	} else {
 
 		episode = await podcastsData.getEpisodeById(id);
 	}
