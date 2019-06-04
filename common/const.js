@@ -133,6 +133,7 @@ const API_CONSTANTS = {
     STREAMS_TITLES: {
         DEFAULT_STREAM_TITLE: "Stream",
         LISTEN_NOTES_STREAM_TITLE: "Powered by LISTEN NOTES",
+        ITUNES_STREAM_TITLE: "Powered by Itunes",
         RSS_STREAM_TITLE: "RSS Feed",
         WEBSITE_STREAM_TITLE: "Website",
         SPOTIFY_STREAM_TITLE: "Spotify",
