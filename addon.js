@@ -186,15 +186,29 @@ builder.defineMetaHandler(async ({
     logger.info(constants.LOG_MESSAGES.START_META_HANDLER + "(type: " + type + " & id: " + id + ")", constants.HANDLERS.META, constants.API_CONSTANTS.TYPES.PODCAST);
     id = id.replace(constants.ID_PREFIX, "");
 
-    const podcast = await podcastsData.getPodcastById(id);
+    if (process.env.USE_ITUNES === "true") {
+        const podcast = await podcastsApiItunes.getPodcastById(id);
 
-    logger.info("Podcast: " + podcast.title + " | " + podcast.country + " | " + podcast.language, constants.HANDLERS.META, constants.API_CONSTANTS.TYPES.PODCAST, null, 1, podcast);
+        logger.info("Podcast: " + podcast.collectionName + " | " + podcast.country + ": " + constants.HANDLERS.META, constants.API_CONSTANTS.TYPES.PODCAST, null, 1, podcast);
 
-    return {
-        meta: await convertors.podcastToSeries(podcast),
-        video: convertors.podcastToSeriesVideo(podcast)
-    };
+        return {
+            meta: await convertorsItunes.podcastToSeries(podcast, "meta"),
+            video: convertorsItunes.podcastToSeriesVideo(podcast)
+        };
+    } else {
+        const podcast = await podcastsData.getPodcastById(id);
+
+        logger.info("Podcast: " + podcast.title + " | " + podcast.country + " | " + podcast.language, constants.HANDLERS.META, constants.API_CONSTANTS.TYPES.PODCAST, null, 1, podcast);
+
+        return {
+            meta: await convertors.podcastToSeries(podcast),
+            video: convertors.podcastToSeriesVideo(podcast)
+        };
+    }
+
+
 });
+
 
 // Docs: https://github.com/Stremio/stremio-addon-sdk/blob/master/docs/api/requests/defineStreamHandler.md
 builder.defineStreamHandler(async ({
@@ -216,8 +230,10 @@ builder.defineStreamHandler(async ({
 
         // When using itunes the id is itunesEpisodeId|listennotesPodcastId
         let idParts = id.split("|");
-        const podcast = await podcastsData.getPodcastById(idParts[1]);
-        const itunesEpisodes = await podcastsApiItunes.getEpisodesByPodcastId(podcast.itunes_id);
+        let idParts2 = idParts[0].split("/");
+        //const podcast = await podcastsData.getPodcastById(idParts[1]);
+        const podcast = await podcastsApiItunes.getPodcastById(idParts[1]);
+        const itunesEpisodes = await podcastsApiItunes.getEpisodesByPodcastId(podcast.collectionId);
         const itunesVideos = convertorsItunes.episodesToVideos(itunesEpisodes).asArray;
         episode = podcastsApiItunes.getEpisodeFromVideos(itunesVideos, constants.ID_PREFIX + idParts[0]);
         episode.podcast = podcast;

@@ -1,5 +1,6 @@
 const logger = require("../common/logger");
 const constants = require("../common/const");
+const podcastsApiItunes = require("../common/podcastsApiItunes");
 
 function fixJson(obj) {
 
@@ -40,7 +41,7 @@ function addPodcastIdToItunesEpisodes(episodes, podcastId) {
 // All functions that convert podcast or episode object to Stremio object
 function episodeToVideo(episode, episodeNumber) {
     return {
-        id: constants.ID_PREFIX + (episode.guid._cdata ? episode.guid._cdata : episode.guid._text ),
+        id: constants.ID_PREFIX + (episode.guid._cdata ? episode.guid._cdata : episode.guid._text),
         title: episode.title._text,
         //released: (new Date(episode.pubDate._text)).toISOString(),
         released: episode.pubDate._text,
@@ -52,7 +53,7 @@ function episodeToVideo(episode, episodeNumber) {
         available: true,
         episode: episodeNumber,
         season: 1,
-        overview: episode.itunes_summary._text
+        //overview: episode.itunes_summary._text
     };
 }
 
@@ -88,7 +89,7 @@ function generateAwards(explicit_content) {
     return (awards);
 };
 
-async function podcastToSeries(podcast) {
+async function podcastToSeries(podcast, origin) {
 
     let released = "";
     if (podcast.releaseDate) released = podcast.releaseDate;
@@ -122,25 +123,47 @@ async function podcastToSeries(podcast) {
     //     };
     // }
     // else {
-        series = {
-            id: constants.ID_PREFIX + podcast.collectionId,
-            type: "series",
-            name: podcast.collectionName,
-            poster: smallImg,
-            genres: podcast.genres,
-            posterShape: "regular",
-            background: largeImg,
-            logo: constants.ADDON_LOGO,
-            //description: podcast.description,
-            director: [podcast.artistName],
-            released: released,
-            inTheaters: true,
-            //language: podcast.language,
-            country: podcast.country,
-            awards: generateAwards(podcast.collectionExplicitness),
-            website: podcast.collectionViewUrl
-        };
+    series = {
+        id: constants.ID_PREFIX + podcast.collectionId,
+        type: "series",
+        name: podcast.collectionName,
+        poster: smallImg,
+        genres: podcast.genres,
+        posterShape: "regular",
+        background: largeImg,
+        logo: constants.ADDON_LOGO,
+        description: "The podcast " + podcast.collectionName + " by " + podcast.artistName + ", from " + podcast.country + " released at: " + released,
+        director: [podcast.artistName],
+        released: released,
+        inTheaters: true,
+        //language: podcast.language,
+        country: podcast.country,
+        awards: generateAwards(podcast.collectionExplicitness),
+        website: podcast.collectionViewUrl
+    };
     // }
+
+    if (podcast.earliest_pub_date_ms || podcast.latest_pub_date_ms) {
+        series.releaseInfo = generateReleaseInfo(podcast.earliest_pub_date_ms, podcast.latest_pub_date_ms)
+    }
+
+    // Sets series parameters if there is episodes to the podcast
+    series.runtime = "Avg episode length: 25" + " min     | ";
+
+    let episodesAsVideos = {};
+    if (origin != "catalog") {
+
+        const allEpisodes = await podcastsApiItunes.getEpisodesByPodcastId(podcast.collectionId);
+
+        episodesAsVideos = episodesToVideos(fixJsons(allEpisodes));
+        episodesAsVideos.asArray = addPodcastIdToItunesEpisodes(episodesAsVideos.asArray, podcast.collectionId);
+
+        series.videos = episodesAsVideos.asArray;
+
+        // Adds extra field on the series (the episodes / videos by id)
+        series.videosById = episodesAsVideos.asObjectById;
+    }
+
 
     return series;
 };
@@ -149,9 +172,9 @@ async function podcastsToSerieses(podcasts, origin) {
 
     let serieses = []
 
-    for (let i = 0; i < podcasts.length; i++){
+    for (let i = 0; i < podcasts.length; i++) {
 
-        let series = await podcastToSeries(podcasts[i]);
+        let series = await podcastToSeries(podcasts[i], origin);
         serieses.push(series);
     }
 
@@ -161,15 +184,29 @@ async function podcastsToSerieses(podcasts, origin) {
 function generateReleaseInfo(oldestEpisodeTime, newestEpisodeTime) {
 
     return releaseInfo;
-}
+}*/
 
 function podcastToSeriesVideo(podcast) {
+    let series = {
+        id: podcast.collectionId,
+        title: podcast.collectionName,
+        thumbnail: podcast.artworkUrl60,
+        available: true,
+        trailer: podcast.youtube_url,
+        //overview: podcast.description
+    };
+
+    if (podcast.earliest_pub_date_ms)
+        series.released = (new Date(podcast.earliest_pub_date_ms)).toISOString();
+
     return series;
-}*/
+}
 
 module.exports = {
     episodesToVideos,
     addPodcastIdToItunesEpisodes,
     fixJsons,
-    podcastsToSerieses
+    podcastsToSerieses,
+    podcastToSeriesVideo,
+    podcastToSeries
 };
