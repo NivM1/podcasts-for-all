@@ -17,7 +17,6 @@ const manifest = require('./manifest');
 const convertorsItunes = require("./podcasts/convertorsItunes");
 const podcastsApiItunes = require("./common/podcastsApiItunes");
 const searchHelper = require("./resources/searchHelper");
-const podcastRetriver = require('./NewFlow/pocastForAll');
 
 logger.info(constants.LOG_MESSAGES.START_ADDON + " Version: " + process.env.VERSION);
 
@@ -40,22 +39,26 @@ builder.defineCatalogHandler(async ({
         if (extra.genre && id === constants.CATALOGS.BY_GENRE.ID) {
             logger.info(constants.CATALOGS.BY_GENRE.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_GENRE.NAME, extra.genre);
 
-            Serieses = await podcastRetriver.getPodcastsBySearch(extra.genre);
+            const podcasts = await podcastsApiItunes.search(extra.genre);
+            Serieses = await convertorsItunes.podcastsToSerieses(podcasts, constants.HANDLERS.CATALOG.toLowerCase());
 
         } else if (extra.genre && id === constants.CATALOGS.BY_COUNTRY.ID) {
             logger.info(constants.CATALOGS.BY_COUNTRY.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_COUNTRY.NAME, extra.genre);
 
-            Serieses = await podcastRetriver.getPodcastsBySearch(extra.genre);
+            const podcasts = await podcastsApiItunes.search(extra.genre);
+            Serieses = await convertorsItunes.podcastsToSerieses(podcasts, constants.HANDLERS.CATALOG.toLowerCase());
 
         } else if (extra.genre && id === constants.CATALOGS.BY_MOOD.ID) {
             logger.info(constants.CATALOGS.BY_MOOD.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_MOOD.NAME, extra.genre);
 
-            Serieses = await podcastRetriver.getPodcastsBySearch(extra.genre);
+            const podcasts = await podcastsApiItunes.search(extra.genre);
+            Serieses = await convertorsItunes.podcastsToSerieses(podcasts, constants.HANDLERS.CATALOG.toLowerCase());
 
         } else if (extra.genre && id === constants.CATALOGS.BY_TREND.ID) {
             logger.info(constants.CATALOGS.BY_TREND.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_TREND.NAME, extra.genre);
 
-            Serieses = await podcastRetriver.getPodcastsBySearch(extra.genre);
+            const podcasts = await podcastsApiItunes.search(extra.genre);
+            Serieses = await convertorsItunes.podcastsToSerieses(podcasts,  constants.HANDLERS.CATALOG.toLowerCase());
 
         } else if (extra.search) {
             let Serieses = [];
@@ -66,8 +69,8 @@ builder.defineCatalogHandler(async ({
                     search: fixedSearchTerm.toLowerCase()
                 });
 
-                Serieses.asArray = await podcastRetriver.getPodcastsBySearch(fixedSearchTerm);
-
+                const podcasts = await podcastsApiItunes.search(fixedSearchTerm);
+                Serieses.asArray = await convertorsItunes.podcastsToSerieses(podcasts, constants.HANDLERS.CATALOG.toLowerCase());
             } else {
 
                 logger.info(constants.LOG_MESSAGES.SEARCH_ON_CATALOG_HANDLER + extra.search, constants.HANDLERS.CATALOG, constants.CATALOGS.SEARCH.NAME, extra.search.toLowerCase(), null, {
@@ -84,10 +87,12 @@ builder.defineCatalogHandler(async ({
         } else {
             if (!topSearch) {
                 logger.info('take top from new');
+                const podcasts = await podcastsApiItunes.search("top");
+                Serieses = await convertorsItunes.podcastsToSerieses(podcasts,  constants.HANDLERS.CATALOG.toLowerCase());
 
-                Serieses = await podcastRetriver.getPodcastsBySearch('top');
                 topSearch = Serieses;
-            } else {
+            }
+            else {
                 logger.info('take top from cache');
                 Serieses = topSearch;
             }
@@ -191,13 +196,17 @@ builder.defineMetaHandler(async ({
                                  }) => {
 
     logger.info(constants.LOG_MESSAGES.START_META_HANDLER + "(type: " + type + " & id: " + id + ")", constants.HANDLERS.META, constants.API_CONSTANTS.TYPES.PODCAST);
-    const podcastId = id.replace(constants.ID_PREFIX, "");
+    id = id.replace(constants.ID_PREFIX, "");
 
     if (process.env.USE_ITUNES === "true") {
+        const podcast = await podcastsApiItunes.getPodcastById(id);
 
-        const podcastMetaObject = await podcastRetriver.getMetadataForPodcast(podcastId);
-        return podcastMetaObject;
+        logger.info("Podcast: " + podcast.collectionName + " | " + podcast.country + ": " + constants.HANDLERS.META, constants.API_CONSTANTS.TYPES.PODCAST, null, 1, podcast);
 
+        return {
+            meta: await convertorsItunes.podcastToSeries(podcast, constants.HANDLERS.META.toLowerCase()),
+            video: convertorsItunes.podcastToSeriesVideo(podcast)
+        };
     } else {
         const podcast = await podcastsData.getPodcastById(id);
 
