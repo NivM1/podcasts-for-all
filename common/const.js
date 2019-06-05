@@ -44,6 +44,7 @@ const LOG_MESSAGES = {
 
 const PODCASTS_DATA_BASE_API_URL = "https://listen-api.listennotes.com";
 const PODCASTS_DATA_BASE_API_URL_ITUNES = "https://itunes.apple.com";
+const PODCASTS_BASE_API_URL_SPREAKER = "https://api.spreaker.com/v2";
 
 const PODCASTS_DATA_API_ROUTES = {
     SEARCH: "/api/v2/search",
@@ -59,12 +60,18 @@ const ITUNES_DATA_API_ROUTES = {
     LOOKUP: "/lookup"
 };
 
+const SPREAKER_API_ROUTES = {
+    SEARCH: "/search",
+    SHOW: (id) => '/shows/' + id,
+};
+
 const PODCASTS_API_KEY = {
     HEADER_NAME: 'X-ListenAPI-Key',
     KEY: process.env.PODCASTS_API_KEY
 };
 
 const ID_PREFIX = "ap";
+const SPREAKER_ID_PREFIX = 'SPREAKER:';
 
 const CONTACT_EMAIL = "podcasts_for_all@yahoo.com";
 const ADDON_LOGO = "https://github.com/NivM1/podcasts-for-all/blob/master/static/addon_logo.png?raw=true";
@@ -162,8 +169,11 @@ module.exports = {
     LOG_MESSAGES,
     PODCASTS_DATA_BASE_API_URL,
     PODCASTS_DATA_BASE_API_URL_ITUNES,
+    PODCASTS_BASE_API_URL_SPREAKER,
+    SPREAKER_API_ROUTES,
     PODCASTS_DATA_API_ROUTES,
     ITUNES_DATA_API_ROUTES,
+    SPREAKER_ID_PREFIX,
     PODCASTS_API_KEY,
     API_CONSTANTS,
     ID_PREFIX,
