@@ -22,6 +22,7 @@ logger.info(constants.LOG_MESSAGES.START_ADDON + " Version: " + process.env.VERS
 
 const builder = new addonBuilder(manifest);
 
+
 let topSearch;
 
 // Addon handlers
