@@ -17,8 +17,20 @@ const showToStremioSeries = function (show) {
         show.site_url);
 };
 
-const fullShowToFullStremioSeries = function (show) {
+function episodeToStremioVideo(episode, i) {
+    return stremioConvertor.getstremioVideo(
+        episode.episode_id,
+        episode.download_url,
+        '',
+        1,
+        i,
+        [stremioConvertor.getStremioStream(episode.download_url)],
+        episode.title);
+}
 
+function fullShowToFullStremioSeries(show, episodes) {
+
+    const videos = episodes.map((x, i) => episodeToStremioVideo(x, i));
 
     return stremioConvertor.getStremioSeries(
         constatnts.SPREAKER_ID_PREFIX + show.show_id,
@@ -32,13 +44,20 @@ const fullShowToFullStremioSeries = function (show) {
         show.language,
         null,
         null,
-        show.site_url);
-};
+        show.site_url
+        , videos);
+}
 
-const getMetaForShow = function (show) {
+const getMetaForShow = function (show, episodes) {
 
-    const fullStremioShow = fullShowToFullStremioSeries(show);
-    const meta = stremioConvertor.getStremioMeta(fullStremioShow, null);
+    const fullStremioShow = fullShowToFullStremioSeries(show, episodes);
+
+    // with test video object
+    const meta = stremioConvertor.getStremioMeta(fullStremioShow, {
+        available: true,
+        id: show.id,
+        title: 'doron title'
+    });
 
     return meta;
 

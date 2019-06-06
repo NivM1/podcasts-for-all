@@ -63,6 +63,7 @@ const ITUNES_DATA_API_ROUTES = {
 const SPREAKER_API_ROUTES = {
     SEARCH: "/search",
     SHOW: (id) => '/shows/' + id,
+    EPISODES: (id) => '/shows/' + id + '/episodes',
 };
 
 const PODCASTS_API_KEY = {

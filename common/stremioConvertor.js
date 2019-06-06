@@ -1,6 +1,6 @@
 const constants = require('../common/const');
 
-function getStremioSeries(id, name, poster, genres, background, description, director, released, language, country, awards, website, releaseInfo, runtime) {
+function getStremioSeries(id, name, poster, genres, background, description, director, released, language, country, awards, website, releaseInfo, runtime, videos) {
     return {
         id: constants.ID_PREFIX + id,
         type: "series",
@@ -20,17 +20,39 @@ function getStremioSeries(id, name, poster, genres, background, description, dir
         country,
         awards,
         website,
+        videos,
     };
 }
 
-const getStremioMeta = function(meta, videos) {
+const getstremioVideo = function (id,audio,released,season,episode,streams,title) {
+    return {
+        id: constants.ID_PREFIX + id,
+        available: true,
+        audio,
+        season,
+        episode,
+        streams,
+        released,
+        title
+    }
+};
+
+const getStremioStream = function (url) {
+    return {
+        url,
+    }
+};
+
+const getStremioMeta = function (meta, video) {
     return {
         meta,
-        videos,
+        video,
     }
 };
 
 module.exports = {
     getStremioSeries,
     getStremioMeta,
+    getStremioStream,
+    getstremioVideo
 };
