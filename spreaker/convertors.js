@@ -44,8 +44,10 @@ function fullShowToFullStremioSeries(show, episodes) {
         show.language,
         null,
         null,
-        show.site_url
-        , videos);
+        show.site_url,
+        null,
+        null,
+        videos);
 }
 
 const getMetaForShow = function (show, episodes) {
@@ -55,8 +57,10 @@ const getMetaForShow = function (show, episodes) {
     // with test video object
     const meta = stremioConvertor.getStremioMeta(fullStremioShow, {
         available: true,
-        id: show.id,
-        title: 'doron title'
+        id: show.show_id,
+        title: show.title,
+        trailer: undefined,
+        thumbnail: show.image_url,
     });
 
     return meta;
