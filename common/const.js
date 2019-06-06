@@ -64,6 +64,7 @@ const SPREAKER_API_ROUTES = {
     SEARCH: "/search",
     SHOW: (id) => '/shows/' + id,
     EPISODES: (id) => '/shows/' + id + '/episodes',
+    EPISODE: (id) => '/episodes/' + id,
 };
 
 const PODCASTS_API_KEY = {

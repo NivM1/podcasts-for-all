@@ -5,9 +5,9 @@ const showToStremioSeries = function (show) {
     return stremioConvertor.getStremioSeries(
         constatnts.SPREAKER_ID_PREFIX + show.show_id,
         show.title,
-        show.image_url,
+        show.image_original_url,
         null,
-        show.image_url,
+        show.image_original_url,
         null,
         null,
         null,
@@ -19,7 +19,7 @@ const showToStremioSeries = function (show) {
 
 function episodeToStremioVideo(episode, i) {
     return stremioConvertor.getstremioVideo(
-        episode.episode_id,
+        constatnts.SPREAKER_ID_PREFIX + episode.episode_id,
         episode.download_url,
         '',
         1,
@@ -67,7 +67,12 @@ const getMetaForShow = function (show, episodes) {
 
 };
 
+const getStreamsForEpisode = function (episode) {
+    return stremioConvertor.getStreamioStreams([stremioConvertor.getStremioStream(episode.download_url)]);
+};
+
 module.exports = {
     showToStremioSeries,
     getMetaForShow,
+    getStreamsForEpisode
 };

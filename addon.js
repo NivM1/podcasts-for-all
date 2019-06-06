@@ -224,7 +224,7 @@ builder.defineStreamHandler(async ({
         id: id
     });
 
-    id = id.replace(constants.ID_PREFIX, "");
+    episodeId = id.replace(constants.ID_PREFIX, "");
 
     let episode = {};
 
@@ -232,23 +232,16 @@ builder.defineStreamHandler(async ({
 
         logger.info(constants.LOG_MESSAGES.USING_ITUNES_STRAEM_HANDLER);
 
-        // When using itunes the id is itunesEpisodeId|listennotesPodcastId
-        let idParts = id.split("|");
-        let idParts2 = idParts[0].split("/");
-        //const podcast = await podcastsData.getPodcastById(idParts[1]);
-        const podcast = await podcastsApiItunes.getPodcastById(idParts[1]);
-        const itunesEpisodes = await podcastsApiItunes.getEpisodesByPodcastId(podcast.collectionId);
-        const itunesVideos = convertorsItunes.episodesToVideos(itunesEpisodes).asArray;
-        episode = podcastsApiItunes.getEpisodeFromVideos(itunesVideos, constants.ID_PREFIX + idParts[0]);
-        episode.podcast = podcast;
+        const streams = await  podcastRetriver.getStreamsForEpisodeId(episodeId);
+        return streams;
+
     } else {
 
         episode = await podcastsData.getEpisodeById(id);
+        return {
+            streams: convertors.getStreamsFromEpisode(episode)
+        };
     }
-
-    return {
-        streams: convertors.getStreamsFromEpisode(episode)
-    };
 });
 
 // Docs: https://github.com/Stremio/stremio-addon-sdk/blob/master/docs/api/requests/defineSubtitlesHandler.md

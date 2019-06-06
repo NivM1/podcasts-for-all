@@ -50,9 +50,16 @@ const getStremioMeta = function (meta, video) {
     }
 };
 
+const getStreamioStreams = function(streams) {
+    return {
+        streams: streams
+    }
+};
+
 module.exports = {
     getStremioSeries,
     getStremioMeta,
     getStremioStream,
-    getstremioVideo
+    getstremioVideo,
+    getStreamioStreams
 };

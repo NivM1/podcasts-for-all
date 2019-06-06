@@ -31,7 +31,7 @@ const getPodcastsBySearch = async function (searchTerm) {
     const itunesPodcasts = await podcastsApiItunes.search(searchTerm);
     const itunesStremioPodcasts = await convertorsItunes.podcastsToSerieses(itunesPodcasts, constants.HANDLERS.CATALOG.toLowerCase());
 
-    const spreakerShows = await spreakerApi.search(searchTerm);
+    const spreakerShows = await spreakerApi.searchShows(searchTerm);
     const spreakerStremioPodcasts = spreakerShows.map(spreakerConvertor.showToStremioSeries);
 
     return getMixedPodcasts(itunesStremioPodcasts, spreakerStremioPodcasts);
@@ -42,9 +42,9 @@ const getPodcastsBySearch = async function (searchTerm) {
 const getMetadataForPodcast = async function (podcastId) {
 
     if (podcastId.startsWith(constants.SPREAKER_ID_PREFIX)) {
-        const spreakerId = podcastId.replace(constants.SPREAKER_ID_PREFIX, '');
-        const spreakerShow = await spreakerApi.getSpreakerShow(spreakerId);
-        const episodes = await spreakerApi.getEpisodesByShowId(spreakerId);
+        const spreakerShowId = podcastId.replace(constants.SPREAKER_ID_PREFIX, '');
+        const spreakerShow = await spreakerApi.getSpreakerShow(spreakerShowId);
+        const episodes = await spreakerApi.getEpisodesByShowId(spreakerShowId);
         const spreakerStremioMeta = spreakerConvertor.getMetaForShow(spreakerShow, episodes);
 
 
@@ -62,8 +62,36 @@ const getMetadataForPodcast = async function (podcastId) {
 
 };
 
+const getStreamsForEpisodeId = async function (episodeId) {
+
+    if (episodeId.startsWith(constants.SPREAKER_ID_PREFIX)) {
+        const spreakerEpisodeId = episodeId.replace(constants.SPREAKER_ID_PREFIX,'');
+        const episode = await spreakerApi.getEpisodeById(spreakerEpisodeId);
+        const streams = spreakerConvertor.getStreamsForEpisode(episode);
+
+        return streams;
+    }
+
+    let episode = {};
+    let idParts = episodeId.split("|");
+    let idParts2 = idParts[0].split("/");
+    const podcast = await podcastsApiItunes.getPodcastById(idParts[1]);
+    const itunesEpisodes = await podcastsApiItunes.getEpisodesByPodcastId(podcast.collectionId);
+    const itunesVideos = convertorsItunes.episodesToVideos(itunesEpisodes).asArray;
+    episode = podcastsApiItunes.getEpisodeFromVideos(itunesVideos, constants.ID_PREFIX + idParts[0]);
+    episode.podcast = podcast;
+
+    const streams =  convertorsItunes.getStreamsFromEpisode(episode);
+
+    return {
+        streams
+    }
+
+};
+
 
 module.exports = {
     getPodcastsBySearch,
     getMetadataForPodcast,
+    getStreamsForEpisodeId,
 };
