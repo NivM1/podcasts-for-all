@@ -204,7 +204,7 @@ function getStreamsFromEpisode(episode) {
         title: constants.API_CONSTANTS.STREAMS_TITLES.DEFAULT_STREAM_TITLE
     }];
 
-    if (process.env.USE_ITUNES == "true"){
+    if (process.env.USE_ITUNES === "true"){
 
         return (streams);
     }
