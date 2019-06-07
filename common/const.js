@@ -39,7 +39,9 @@ const LOG_MESSAGES = {
     INIT_GENRES_BY_ID_OBJECT: "Done! Create genres object. Num of genres: ",
     USING_ITUNES_STRAEM_HANDLER: "Using itunes for stream handler",
     USING_ITUNES_GET_EPISODES: "Using itunes for meta handler",
-    ZERO_RESULTS_EPISODES_ITUNES: "Itunes return 0 result on episodes: "
+    ZERO_RESULTS_EPISODES_ITUNES: "Itunes return 0 result on episodes: ",
+    TAKE_TOP_FROM_CATCH: "Take top from catch",
+    TAKE_TOP_FROM_ORIGIN: "Take top from origin"
 };
 
 const PODCASTS_DATA_BASE_API_URL = "https://listen-api.listennotes.com";
@@ -142,6 +144,8 @@ const API_CONSTANTS = {
     STREAMS_TITLES: {
         DEFAULT_STREAM_TITLE: "Stream",
         LISTEN_NOTES_STREAM_TITLE: "Powered by LISTEN NOTES",
+        SPREAKER_STREAM_TITLE: "Powered by SPREAKER",
+        ITUNES_STREAM_TITLE: "Powered by Itunes",
         ITUNES_STREAM_TITLE: "Powered by Itunes",
         RSS_STREAM_TITLE: "RSS Feed",
         WEBSITE_STREAM_TITLE: "Website",
@@ -163,6 +167,10 @@ const PODCAST_TYPE = {
 
 const SEARCH_PREFIX = "podcast:"
 
+const ENVIRONMENT = {
+    DEVELOPMENT: "development",
+    PRODUCATION: "producation"
+}
 module.exports = {
     PODCAST_TYPE,
     CATALOGS,
@@ -182,5 +190,6 @@ module.exports = {
     CONTACT_EMAIL,
     ADDON_LOGO,
     ADDON_BACKGROUND,
-    SEARCH_PREFIX
+    SEARCH_PREFIX,
+    ENVIRONMENT
 };

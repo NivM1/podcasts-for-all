@@ -9,20 +9,38 @@ function getMixedPodcasts(source1, source2) {
     const margedPodcastList = [];
     if (source1.length > source2.length) {
         source1.forEach((x, i) => {
-            margedPodcastList.push(x);
-            if (source2[i])
+            if(!checkIfPodcastExist(margedPodcastList, x.name)) margedPodcastList.push(x);
+            if (source2[i] && !checkIfPodcastExist(margedPodcastList, source2[i].name))
                 margedPodcastList.push(source2[i]);
         });
 
     } else {
         source2.forEach((x, i) => {
             margedPodcastList.push(x);
-            if (source1[i])
+            if (source1[i] && !checkIfPodcastExist(margedPodcastList, source1[i].name))
                 margedPodcastList.push(source1[i]);
         });
     }
 
     return margedPodcastList;
+}
+
+function checkIfPodcastExist(podcasts, name){
+
+    let isFound = false;
+    let counter = 0;
+
+    while (!isFound & counter < podcasts.length){
+
+        if (podcasts[counter].name == name){
+
+            isFound = true;
+        }
+                
+        counter++;
+    }
+
+    return (isFound)
 }
 
 
@@ -32,7 +50,7 @@ const getPodcastsBySearch = async function (searchTerm) {
     const itunesStremioPodcasts = await convertorsItunes.podcastsToSerieses(itunesPodcasts, constants.HANDLERS.CATALOG.toLowerCase());
 
     const spreakerShows = await spreakerApi.searchShows(searchTerm);
-    const spreakerStremioPodcasts = spreakerShows.map(spreakerConvertor.showToStremioSeries);
+    const spreakerStremioPodcasts = await Promise.all(spreakerShows.map(spreakerConvertor.showToStremioSeries));
 
     return getMixedPodcasts(itunesStremioPodcasts, spreakerStremioPodcasts);
     //

@@ -1,25 +1,49 @@
 const stremioConvertor = require('../common/stremioConvertor');
-const constatnts = require('../common/const');
+const constants = require('../common/const');
+const podcastApi = require('./PodcastApi');
+const languages = require('../resources/languages');
 
-const showToStremioSeries = function (show) {
+const showToStremioSeries = async function (show) {
+
+    // Get the full show because there is not enogth data in the basic show object
+    const fullShow = await podcastApi.getSpreakerShow(show.show_id);
+
     return stremioConvertor.getStremioSeries(
-        constatnts.SPREAKER_ID_PREFIX + show.show_id,
-        show.title,
-        show.image_original_url,
+        constants.SPREAKER_ID_PREFIX + fullShow.show_id,
+        fullShow.title,
+        fullShow.image_original_url,
+        getAttributesTitle(languages[fullShow.language].name),
+        fullShow.image_original_url,
+        fullShow.description,
+        [fullShow.author.fullname],
         null,
-        show.image_original_url,
-        null,
-        null,
-        null,
-        null,
+        fullShow.language,
         null,
         null,
         show.site_url);
 };
 
+function getAttributesTitle(language, numOfEpisodes, lastEpisodeDuration){
+    let languageTitle = "<b>Language: </b>";
+    let attributesTitles = ["<em>" + constants.API_CONSTANTS.STREAMS_TITLES.SPREAKER_STREAM_TITLE + "</em>"]
+    attributesTitles.push(languageTitle += language);
+    
+    if (numOfEpisodes){
+        let numOfEpisodesTitle = "<b>Numer of episodes: </b>";
+        attributesTitles.push(numOfEpisodesTitle += numOfEpisodes);
+    } 
+
+    if (lastEpisodeDuration){
+        let lastEpisodeDurationTitle = "<b>Last episode duration: </b>";
+        attributesTitles.push(lastEpisodeDurationTitle += (lastEpisodeDuration/60000).toFixed(0) + " minutes");
+    }
+
+    return (attributesTitles)
+}
+
 function episodeToStremioVideo(episode, i) {
     return stremioConvertor.getstremioVideo(
-        constatnts.SPREAKER_ID_PREFIX + episode.episode_id,
+        constants.SPREAKER_ID_PREFIX + episode.episode_id,
         episode.download_url,
         '',
         1,
@@ -33,13 +57,13 @@ function fullShowToFullStremioSeries(show, episodes) {
     const videos = episodes.map((x, i) => episodeToStremioVideo(x, i));
 
     return stremioConvertor.getStremioSeries(
-        constatnts.SPREAKER_ID_PREFIX + show.show_id,
+        constants.SPREAKER_ID_PREFIX + show.show_id,
         show.title,
         show.image_url,
-        null,
+        getAttributesTitle(languages[show.language].name, episodes.length, episodes[0].duration),
         show.image_url,
         show.description,
-        null,
+        [show.author.fullname],
         null,
         show.language,
         null,

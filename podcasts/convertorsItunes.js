@@ -128,7 +128,7 @@ async function podcastToSeries(podcast, origin) {
         type: "series",
         name: podcast.collectionName,
         poster: smallImg,
-        genres: podcast.genres,
+        genres: getAttributesTitle(podcast.country, podcast.genres),
         posterShape: "regular",
         background: largeImg,
         logo: constants.ADDON_LOGO,
@@ -167,6 +167,21 @@ async function podcastToSeries(podcast, origin) {
 
     return series;
 };
+
+function getAttributesTitle(country, genres){
+    let countryTitle = "<b>Country: </b>";
+    let attributesTitles = ["<em>" + constants.API_CONSTANTS.STREAMS_TITLES.ITUNES_STREAM_TITLE + "</em>"]
+    attributesTitles.push(countryTitle += country);
+    
+    genresTitle = "<b>Genres: </b>";
+    genres.forEach(genre => {
+
+        genresTitle += genre + " | "
+    });
+    attributesTitles.push(genresTitle);
+
+    return (attributesTitles)
+}
 
 async function podcastsToSerieses(podcasts, origin) {
 
