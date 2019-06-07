@@ -97,7 +97,7 @@ const CATALOGS = {
     },
     BY_TREND: {
         ID: 'byTrend',
-        NAME: '100 Trends'
+        NAME: 'Trends'
     },
     FEELING_LUCKY: {
         ID: 'feelingLucky',
