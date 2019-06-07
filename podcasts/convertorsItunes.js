@@ -128,7 +128,7 @@ async function podcastToSeries(podcast, origin) {
         type: "series",
         name: podcast.collectionName,
         poster: smallImg,
-        genres: podcast.genres,
+        genres: getAttributesTitle(podcast.country, podcast.genres),
         posterShape: "regular",
         background: largeImg,
         logo: constants.ADDON_LOGO,
@@ -168,6 +168,21 @@ async function podcastToSeries(podcast, origin) {
     return series;
 };
 
+function getAttributesTitle(country, genres){
+    let countryTitle = "<b>Country: </b>";
+    let attributesTitles = ["<em>" + constants.API_CONSTANTS.STREAMS_TITLES.ITUNES_STREAM_TITLE + "</em>"]
+    attributesTitles.push(countryTitle += country);
+    
+    genresTitle = "<b>Genres: </b>";
+    genres.forEach(genre => {
+
+        genresTitle += genre + " | "
+    });
+    attributesTitles.push(genresTitle);
+
+    return (attributesTitles)
+}
+
 async function podcastsToSerieses(podcasts, origin) {
 
     let serieses = []
@@ -202,11 +217,67 @@ function podcastToSeriesVideo(podcast) {
     return series;
 }
 
+function getStreamsFromEpisode(episode) {
+    let streams = [{
+        url: episode.audio,
+        title: constants.API_CONSTANTS.STREAMS_TITLES.DEFAULT_STREAM_TITLE
+    }];
+
+    if (process.env.USE_ITUNES === "true"){
+
+        return (streams);
+    }
+
+    streams.push(
+        {
+            externalUrl: episode.listennotes_url,
+            title: constants.API_CONSTANTS.STREAMS_TITLES.LISTEN_NOTES_STREAM_TITLE
+        });
+
+    if (episode.podcast.website) streams.push({
+        externalUrl: episode.podcast.website,
+        title: constants.API_CONSTANTS.STREAMS_TITLES.WEBSITE_STREAM_TITLE
+    });
+
+    if (episode.podcast.rss) streams.push({
+        externalUrl: episode.podcast.rss,
+        title: constants.API_CONSTANTS.STREAMS_TITLES.RSS_STREAM_TITLE
+    });
+
+    if (episode.podcast.extra.youtube_url) streams.push({
+        ytid: episode.podcast.extra.youtube_url.split("?v=")[1],
+        title: constants.API_CONSTANTS.STREAMS_TITLES.YOUTUBE_STREAM_TITLE
+    });
+
+    if (episode.podcast.extra.spotify_url) streams.push({
+        externalUrl: episode.podcast.extra.spotify_url,
+        title: constants.API_CONSTANTS.STREAMS_TITLES.SPOTIFY_STREAM_TITLE
+    });
+
+    if (episode.podcast.extra.facebook_handle) streams.push({
+        externalUrl: constants.API_CONSTANTS.FACEBOOK_BASE_URL + episode.podcast.extra.facebook_handle,
+        title: constants.API_CONSTANTS.STREAMS_TITLES.FACEBOOK_STREAM_TITLE
+    });
+
+    if (episode.podcast.extra.twitter_handle) streams.push({
+        externalUrl: constants.API_CONSTANTS.TWITTER_BASE_URL + episode.podcast.extra.twitter_handle,
+        title: constants.API_CONSTANTS.STREAMS_TITLES.TWITTER_STREAM_TITLE
+    });
+
+    if (episode.podcast.extra.instagram_handle) streams.push({
+        externalUrl: constants.API_CONSTANTS.INSTAGRAM_BASE_URL + episode.podcast.extra.instagram_handle,
+        title: constants.API_CONSTANTS.STREAMS_TITLES.INSTAGRAM_STREAM_TITLE
+    });
+
+    return streams;
+}
+
 module.exports = {
     episodesToVideos,
     addPodcastIdToItunesEpisodes,
     fixJsons,
     podcastsToSerieses,
     podcastToSeriesVideo,
-    podcastToSeries
+    podcastToSeries,
+    getStreamsFromEpisode
 };
