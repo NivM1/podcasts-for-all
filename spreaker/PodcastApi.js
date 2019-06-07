@@ -8,7 +8,7 @@ const apiInstanceItunes = axios.create({
 
 const searchShows = async function(term, limit, offset) {
 
-    if (!limit) limit = 50;
+    if (!limit) limit = 25;
 
     try {
         const result = await apiInstanceItunes.get(constants.SPREAKER_API_ROUTES.SEARCH, {
