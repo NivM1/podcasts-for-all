@@ -97,7 +97,7 @@ builder.defineCatalogHandler(async ({
     else {
 
         // No catch while dev
-        if (!topCatch || process.env.ENVIRONMENT == constants.ENVIRONMENT.DEVELOPMENT) {
+        if (!topCatch || process.env.ENVIRONMENT === constants.ENVIRONMENT.DEVELOPMENT) {
             logger.debug(constants.LOG_MESSAGES.TAKE_TOP_FROM_ORIGIN);
 
             Serieses = await podcastRetriver.getPodcastsBySearch('top');
