@@ -1,7 +1,7 @@
-const logger = require("../common/logger");
-const constants = require("../common/const");
-const podcastsApiItunes = require("../itunes/api");
-const stremioConvertor = require('../common/stremioConvertor');
+const logger = require("../../common/logger");
+const constants = require("../../common/const");
+const podcastsApiItunes = require("./api");
+const stremioConvertor = require('../../common/stremioConvertor');
 
 function fixJson(obj) {
 

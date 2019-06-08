@@ -1,5 +1,5 @@
-const constants = require("../common/const");
-const logger = require("../common/logger");
+const constants = require("../../common/const");
+const logger = require("../../common/logger");
 const axios = require('axios/index');
 
 const apiInstanceSpreaker = axios.create({

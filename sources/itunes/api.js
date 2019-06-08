@@ -1,7 +1,7 @@
-const constants = require("../common/const");
-const logger = require("../common/logger");
-const axios = require('axios');
-var convert = require('xml-js');
+const constants = require("../../common/const");
+const logger = require("../../common/logger");
+const axios = require('axios/index');
+const convert = require('xml-js');
 
 // Itunes api docs https://affiliate.itunes.apple.com/resources/documentation/itunes-store-web-service-search-api
 const apiInstanceItunes = axios.create({

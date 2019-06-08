@@ -1,9 +1,9 @@
-const podcastsApiItunes = require("../itunes/api");
-const convertorsItunes = require("../itunes/convertors");
-const spreakerApi = require('../spreaker/api');
-const spreakerConvertor = require('../spreaker/convertors');
-const constants = require('../common/const');
-const logger = require('../common/logger');
+const podcastsApiItunes = require("./sources/itunes/api");
+const convertorsItunes = require("./sources/itunes/convertors");
+const spreakerApi = require('./sources/spreaker/api');
+const spreakerConvertor = require('./sources/spreaker/convertors');
+const constants = require('./common/const');
+const logger = require('./common/logger');
 
 function getMixedPodcasts(source1, source2) {
     const margedPodcastList = [];
