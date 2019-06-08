@@ -87,8 +87,6 @@
 
 ## Setup for Development
 
-* Go to <a href="https://www.listennotes.com/api/">Listen Notes API</a> :page_facing_up:
-* Create new **_account_** and save your **_API_KEY_** :memo:
 * Now it's time for some preperation
 ```bash 
 # Clone this repository
@@ -104,7 +102,6 @@ $ npm install
 ```diff
 +# VERSION= [Addon Version]
 +# ENVIRONMENT= [development/production]
-+# PODCASTS_API_KEY= [Listen Notes API KEY]
 +# LOG_LEVEL= [Logger level- such as: trace, debug, error...]
 +# LOGGER_TOKEN= [Your Logzio api` token]
 +# LOGGER_HOST= [Destination host name]
