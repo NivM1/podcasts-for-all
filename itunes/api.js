@@ -11,12 +11,14 @@ const apiInstanceItunes = axios.create({
 async function search(term, limit) {
 
     if (!limit) limit = constants.API_CONSTANTS.ITUNES_LIMIT_RESULTS;
-    
-    const result = await apiInstanceItunes.get(constants.ITUNES_DATA_API_ROUTES.SEARCH, {params:{
-        term: term,
-        limit: limit,
-        media: "podcast"
-    }});
+
+    const result = await apiInstanceItunes.get(constants.ITUNES_DATA_API_ROUTES.SEARCH, {
+        params: {
+            term: term,
+            limit: limit,
+            media: "podcast"
+        }
+    });
 
     return (result.data.results);
 }
@@ -47,36 +49,15 @@ async function getEpisodesByPodcastId(feedUrl) {
 
     const episodes = await getEpisodesFromFeed(feedUrl);
 
-    if (episodes.rss.channel.item.length === 0){
+    if (episodes.rss.channel.item.length === 0) {
         logger.info(constants.LOG_MESSAGES.ZERO_RESULTS_EPISODES_ITUNES + id);
     }
 
     return episodes.rss.channel.item;
 }
 
-function getEpisodeFromVideos(episodes, episodeId){
-
-    let found = false;
-    let counter = 0;
-    let episode;
-
-    while (!found && counter < episodes.length){
-
-        if (episodes[counter].id === episodeId){
-
-            episode = episodes[counter];
-            found = true;
-        }
-
-        counter++;
-    }
-
-    return (episode);
-}
-
 module.exports = {
     search,
     getPodcastById,
     getEpisodesByPodcastId,
-    getEpisodeFromVideos
 };

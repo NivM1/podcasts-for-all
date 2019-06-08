@@ -91,19 +91,15 @@ const getStreamsForEpisodeId = async function (episodeId) {
         return streams;
     }
 
-    let episode = {};
-    let idParts = episodeId.split("|");
-    let idParts2 = idParts[0].split("/");
-    const podcast = await podcastsApiItunes.getPodcastById(idParts[1]);
-    const itunesEpisodes = await podcastsApiItunes.getEpisodesByPodcastId(podcast.collectionId);
-    const itunesVideos = convertorsItunes.episodesToVideos(itunesEpisodes).asArray;
-    episode = podcastsApiItunes.getEpisodeFromVideos(itunesVideos, constants.ID_PREFIX + idParts[0]);
-    episode.podcast = podcast;
+    if (episodeId.startsWith(constants.ITUNES_ID_PREFIX)) {
+        const ids = episodeId.replace(constants.ITUNES_ID_PREFIX,'').split(constants.ITUNES_EPISODE_ID_SEPARATOR);
+        const feedUrl = ids[0];
+        const episodeGuid = ids[1];
 
-    const streams = convertorsItunes.getStreamsFromEpisode(episode);
+        const episodes = await podcastsApiItunes.getEpisodesByPodcastId(feedUrl);
+        const streams = convertorsItunes.getStreamsFromEpisode(episodes, episodeGuid, feedUrl);
 
-    return {
-        streams
+        return streams;
     }
 
 };
