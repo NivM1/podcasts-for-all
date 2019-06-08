@@ -19,13 +19,11 @@ const podcastsApiItunes = require("./itunes/api");
 const searchHelper = require("./resources/searchHelper");
 const podcastRetriver = require('./NewFlow/pocastForAll');
 
-
 logger.info(constants.LOG_MESSAGES.START_ADDON + " Version: " + process.env.VERSION);
 
 const builder = new addonBuilder(manifest);
 
-
-let topSearch;
+let topCatch;
 
 // Addon handlers
 // Docs: https://github.com/Stremio/stremio-addon-sdk/blob/master/docs/api/requests/defineCatalogHandler.md
@@ -36,32 +34,49 @@ builder.defineCatalogHandler(async ({
 }) => {
     let Serieses = [];
 
-    // All catalogs handlers
-    if (extra.genre && id === constants.CATALOGS.BY_GENRE.ID) {
-        logger.info(constants.CATALOGS.BY_GENRE.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_GENRE.NAME, extra.genre);
+    // If specific genre selected (or just top catalog)
+    if (extra.genre) {
 
-        Serieses = await podcastRetriver.getPodcastsBySearch(extra.genre);
+        // All catalogs handlers
+        switch (id) {
 
-    } else if (extra.genre && id === constants.CATALOGS.BY_COUNTRY.ID) {
-        logger.info(constants.CATALOGS.BY_COUNTRY.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_COUNTRY.NAME, extra.genre);
+            // Switch between catalogs
+            case constants.CATALOGS.BY_GENRE.ID: {
 
-        Serieses = await podcastRetriver.getPodcastsBySearch(extra.genre);
+                logger.info(constants.CATALOGS.BY_GENRE.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_GENRE.NAME, extra.genre);
 
-    } else if (extra.genre && id === constants.CATALOGS.BY_MOOD.ID) {
-        logger.info(constants.CATALOGS.BY_MOOD.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_MOOD.NAME, extra.genre);
+                Serieses = await podcastRetriver.getPodcastsBySearch(extra.genre);
+                break;
+            }
+            case constants.CATALOGS.BY_COUNTRY.ID: {
 
-        Serieses = await podcastRetriver.getPodcastsBySearch(extra.genre);
+                logger.info(constants.CATALOGS.BY_COUNTRY.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_COUNTRY.NAME, extra.genre);
 
-    } else if (extra.genre && id === constants.CATALOGS.BY_TREND.ID) {
-        logger.info(constants.CATALOGS.BY_TREND.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_TREND.NAME, extra.genre);
+                Serieses = await podcastRetriver.getPodcastsBySearch(extra.genre);
+                break;
+            }
+            case constants.CATALOGS.BY_MOOD.ID: {
 
-        Serieses = await podcastRetriver.getPodcastsBySearch(extra.genre);
+                logger.info(constants.CATALOGS.BY_MOOD.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_MOOD.NAME, extra.genre);
 
-    }
+                Serieses = await podcastRetriver.getPodcastsBySearch(extra.genre);
+                break;
+            }
+            case constants.CATALOGS.BY_TREND.ID: {
 
-    // Search handler
+                logger.info(constants.CATALOGS.BY_TREND.NAME + ": " + extra.genre, constants.HANDLERS.CATALOG, constants.CATALOGS.BY_TREND.NAME, extra.genre);
+
+                Serieses = await podcastRetriver.getPodcastsBySearch(extra.genre);
+                break;
+            }
+            default: {
+
+                break;
+            }
+        }
+    } 
+    // This is a search
     else if (extra.search) {
-        let Serieses = [];
 
         // We use special prefix for podcasts search
         if (extra.search.toLowerCase().includes(constants.SEARCH_PREFIX)) {
@@ -71,7 +86,7 @@ builder.defineCatalogHandler(async ({
                 search: fixedSearchTerm.toLowerCase()
             });
 
-            Serieses.asArray = await podcastRetriver.getPodcastsBySearch(fixedSearchTerm);
+            Serieses = await podcastRetriver.getPodcastsBySearch(fixedSearchTerm);
 
         } else {
 
@@ -80,23 +95,23 @@ builder.defineCatalogHandler(async ({
             });
 
             // Shows instructions if the search format was not used
-            Serieses.asArray = searchHelper;
+            Serieses = searchHelper;
         }
 
-        return {
-            metas: Serieses.asArray
-        };
-    } else {
-        if (!topSearch || process.env.ENVIRONMENT == constants.ENVIRONMENT.DEVELOPMENT) {
+    } 
+    // Just get top from catch
+    else {
+
+        // No catch while dev
+        if (!topCatch || process.env.ENVIRONMENT == constants.ENVIRONMENT.DEVELOPMENT) {
             logger.debug(constants.LOG_MESSAGES.TAKE_TOP_FROM_ORIGIN);
 
             Serieses = await podcastRetriver.getPodcastsBySearch('top');
-            topSearch = Serieses;
+            topCatch = Serieses;
         } else {
             logger.debug(constants.LOG_MESSAGES.TAKE_TOP_FROM_CATCH);
-            Serieses = topSearch;
+            Serieses = topCatch;
         }
-
     }
 
     // Returns the catalog item or the search results
