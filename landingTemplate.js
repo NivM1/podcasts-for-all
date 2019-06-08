@@ -89,13 +89,6 @@ button:hover {
    width: 60px
 }
 
-#listen{
-   position: fixed;
-   left: 0px;
-   bottom: 0px;
-   width: 160px;
-}
-
 #gitref{
    width: 40px;
 }`
@@ -103,7 +96,6 @@ button:hover {
 function landingTemplate(manifest) {
    const background = manifest.background || 'https://dl.strem.io/addon-background.jpg'
    const logo = manifest.logo || 'https://dl.strem.io/addon-logo.png'
-   const apiLogo = 'https://github.com/NivM1/podcasts-for-all/blob/master/static/listenNotes.png?raw=true';
    const gitLogo = 'https://github.com/NivM1/podcasts-for-all/blob/master/static/Octocat.png?raw=true';
    const contactHTML = manifest.contactEmail ?
       `<h3 class="contact">
@@ -145,7 +137,6 @@ function landingTemplate(manifest) {
          ${contactHTML}
          <h4><img id="gitref" src="${gitLogo}">Open an issue or contribute on <a href="https://github.com/NivM1/podcasts-for-all">github</a></h4>
       </div>
-      <img id="listen" src="${apiLogo}"/>
 		<script>
 			installLink.href = 'stremio://' + window.location.host + '/manifest.json'
 		</script>
