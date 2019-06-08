@@ -1,19 +1,20 @@
-const stremioConvertor = require('../common/stremioConvertor');
-const constants = require('../common/const');
-const podcastApi = require('./PodcastApi');
-const languages = require('../resources/languages');
+const stremioConvertor = require('../../common/stremioConvertor');
+const constants = require('../../common/const');
+const podcastApi = require('./api');
+const languages = require('../../resources/languages');
 
 const showToStremioSeries = async function (show) {
 
     // Get the full show because there is not enogth data in the basic show object
     const fullShow = await podcastApi.getSpreakerShow(show.show_id);
-    const episodes = await podcastApi.getEpisodesByShowId(show.show_id);
+    //const episodes = await podcastApi.getEpisodesByShowId(show.show_id);
 
     return stremioConvertor.getStremioSeries(
         constants.SPREAKER_ID_PREFIX + fullShow.show_id,
         fullShow.title,
         fullShow.image_original_url,
-        getAttributesTitle(languages[fullShow.language].name, episodes.length, episodes[0].duration),
+        // getAttributesTitle(languages[fullShow.language].name, episodes.length, episodes[0].duration),
+        getAttributesTitle(languages[fullShow.language].name),
         fullShow.image_original_url,
         fullShow.description,
         [fullShow.author.fullname],
@@ -93,7 +94,10 @@ const getMetaForShow = function (show, episodes) {
 };
 
 const getStreamsForEpisode = function (episode) {
-    return stremioConvertor.getStreamioStreams([stremioConvertor.getStremioStream(episode.download_url)]);
+    return stremioConvertor.getStreamioStreams([
+        stremioConvertor.getStremioStream(episode.playback_url, null, "Stream"),
+        stremioConvertor.getStremioStream(null, episode.download_url, "Download"),
+        stremioConvertor.getStremioStream(null, episode.site_url, "Episode on Spreaker")]);
 };
 
 module.exports = {

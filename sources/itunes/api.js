@@ -1,7 +1,7 @@
-const constants = require("../common/const");
-const logger = require("../common/logger");
-const axios = require('axios');
-var convert = require('xml-js');
+const constants = require("../../common/const");
+const logger = require("../../common/logger");
+const axios = require('axios/index');
+const convert = require('xml-js');
 
 // Itunes api docs https://affiliate.itunes.apple.com/resources/documentation/itunes-store-web-service-search-api
 const apiInstanceItunes = axios.create({
@@ -11,12 +11,14 @@ const apiInstanceItunes = axios.create({
 async function search(term, limit) {
 
     if (!limit) limit = constants.API_CONSTANTS.ITUNES_LIMIT_RESULTS;
-    
-    const result = await apiInstanceItunes.get(constants.ITUNES_DATA_API_ROUTES.SEARCH, {params:{
-        term: term,
-        limit: limit,
-        media: "podcast"
-    }});
+
+    const result = await apiInstanceItunes.get(constants.ITUNES_DATA_API_ROUTES.SEARCH, {
+        params: {
+            term: term,
+            limit: limit,
+            media: "podcast"
+        }
+    });
 
     return (result.data.results);
 }
@@ -43,41 +45,19 @@ async function getEpisodesFromFeed(feedUrl) {
     })));
 }
 
-async function getEpisodesByPodcastId(id) {
+async function getEpisodesByPodcastId(feedUrl) {
 
-    const podcast = await getPodcastById(id);
-    const episodes = await getEpisodesFromFeed(podcast.feedUrl);
+    const episodes = await getEpisodesFromFeed(feedUrl);
 
-    if (episodes.rss.channel.item.length === 0){
+    if (episodes.rss.channel.item.length === 0) {
         logger.info(constants.LOG_MESSAGES.ZERO_RESULTS_EPISODES_ITUNES + id);
     }
 
-    return (episodes.rss.channel.item);
-}
-
-function getEpisodeFromVideos(episodes, episodeId){
-
-    let found = false;
-    let counter = 0;
-    let episode;
-
-    while (!found && counter < episodes.length){
-
-        if (episodes[counter].id === episodeId){
-
-            episode = episodes[counter];
-            found = true;
-        }
-
-        counter++;
-    }
-
-    return (episode);
+    return episodes.rss.channel.item;
 }
 
 module.exports = {
     search,
     getPodcastById,
     getEpisodesByPodcastId,
-    getEpisodeFromVideos
 };

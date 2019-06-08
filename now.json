@@ -17,7 +17,6 @@
         "LOGGER_HOST": "listener.logz.io",
         "LOGGER_SUPRESS_ERRORS": "false",
         "LOGGER_INCLUDE_DEBUG": "false",
-        "USE_ITUNES": "true",
         "ENVIRONMENT": "prodaction"
     },
     "github": {
