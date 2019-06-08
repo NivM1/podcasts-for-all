@@ -93,7 +93,10 @@ const getMetaForShow = function (show, episodes) {
 };
 
 const getStreamsForEpisode = function (episode) {
-    return stremioConvertor.getStreamioStreams([stremioConvertor.getStremioStream(episode.download_url)]);
+    return stremioConvertor.getStreamioStreams(
+        [stremioConvertor.getStremioStream(episode.playback_url, null, "Stream")],
+        [stremioConvertor.getStremioStream(null, episode.download_url, "Download")],
+        [stremioConvertor.getStremioStream(null, episode.site_url, "Episode on Spreaker")]);
 };
 
 module.exports = {

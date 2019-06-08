@@ -37,9 +37,11 @@ const getstremioVideo = function (id,audio,released,season,episode,streams,title
     }
 };
 
-const getStremioStream = function (url) {
+const getStremioStream = function (url, externalUrl, title) {
     return {
         url,
+        externalUrl,
+        title
     }
 };
 
