@@ -7,13 +7,14 @@ const showToStremioSeries = async function (show) {
 
     // Get the full show because there is not enogth data in the basic show object
     const fullShow = await podcastApi.getSpreakerShow(show.show_id);
-    const episodes = await podcastApi.getEpisodesByShowId(show.show_id);
+    //const episodes = await podcastApi.getEpisodesByShowId(show.show_id);
 
     return stremioConvertor.getStremioSeries(
         constants.SPREAKER_ID_PREFIX + fullShow.show_id,
         fullShow.title,
         fullShow.image_original_url,
-        getAttributesTitle(languages[fullShow.language].name, episodes.length, episodes[0].duration),
+        // getAttributesTitle(languages[fullShow.language].name, episodes.length, episodes[0].duration),
+        getAttributesTitle(languages[fullShow.language].name),
         fullShow.image_original_url,
         fullShow.description,
         [fullShow.author.fullname],

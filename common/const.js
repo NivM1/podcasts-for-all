@@ -165,12 +165,13 @@ const PODCAST_TYPE = {
     SEARCH: 'SEARCH'
 };
 
-const SEARCH_PREFIX = "podcast:"
+const SEARCH_PREFIX = "podcast:";
 
 const ENVIRONMENT = {
     DEVELOPMENT: "development",
-    PRODUCATION: "producation"
-}
+    PRODUCTION: "production"
+};
+
 module.exports = {
     PODCAST_TYPE,
     CATALOGS,

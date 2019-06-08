@@ -122,7 +122,7 @@ async function podcastToSeries(podcast, origin) {
     };
 
     let episodesAsVideos = {};
-    if (origin != "catalog") {
+    if (origin !== "catalog") {
 
         const allEpisodes = await podcastsApiItunes.getEpisodesByPodcastId(podcast.collectionId);
 
@@ -165,7 +165,7 @@ function getAttributesTitle(country, genres, numOfEpisodes, lastEpisodeDuration)
 
 async function podcastsToSerieses(podcasts, origin) {
 
-    let serieses = []
+    let serieses = [];
 
     for (let i = 0; i < podcasts.length; i++) {
 
