@@ -15,6 +15,7 @@ const searchShows = async function(term, limit, offset) {
             params: {
                 q: term,
                 type: 'shows',
+                limit,
             }
         });
 

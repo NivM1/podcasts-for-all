@@ -43,16 +43,15 @@ async function getEpisodesFromFeed(feedUrl) {
     })));
 }
 
-async function getEpisodesByPodcastId(id) {
+async function getEpisodesByPodcastId(feedUrl) {
 
-    const podcast = await getPodcastById(id);
-    const episodes = await getEpisodesFromFeed(podcast.feedUrl);
+    const episodes = await getEpisodesFromFeed(feedUrl);
 
     if (episodes.rss.channel.item.length === 0){
         logger.info(constants.LOG_MESSAGES.ZERO_RESULTS_EPISODES_ITUNES + id);
     }
 
-    return (episodes.rss.channel.item);
+    return episodes.rss.channel.item;
 }
 
 function getEpisodeFromVideos(episodes, episodeId){

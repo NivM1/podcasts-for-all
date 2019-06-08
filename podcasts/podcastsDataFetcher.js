@@ -106,16 +106,6 @@ async function getEpisodeById(id) {
     }
 }
 
-async function getAllEpisodesForPodcast(podcast, itunesFlag) {
-    let episodes = [];
-
-    logger.info(constants.LOG_MESSAGES.USING_ITUNES_GET_EPISODES);
-
-    episodes = await podcastsApiItunes.getEpisodesByPodcastId(podcast.itunes_id);
-
-    return episodes.reverse();
-}
-
 async function getFeelingLucky() {
     logger.debug(constants.LOG_MESSAGES.START_FEELING_LUCKY, constants.HANDLERS.CATALOG, constants.CATALOGS.FEELING_LUCKY, null, null, null);
 
@@ -149,9 +139,7 @@ function logListenNoteErrors(operation, e) {
 }
 
 module.exports = {
-    getAllEpisodesForPodcast,
     searchPodcasts,
-    getBestPodcasts,
     getPodcastById,
     getEpisodeById,
     getFeelingLucky

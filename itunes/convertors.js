@@ -1,6 +1,7 @@
 const logger = require("../common/logger");
 const constants = require("../common/const");
 const podcastsApiItunes = require("../itunes/api");
+const stremioConvertor = require('../common/stremioConvertor');
 
 function fixJson(obj) {
 
@@ -18,17 +19,20 @@ function fixJson(obj) {
 
 function fixJsons(objs) {
 
+    if (!Array.isArray(objs))
+        return fixJson(objs);
+
     let newObjs = [];
     objs.forEach(obj => {
         newObjs.push(fixJson(obj));
-    })
+    });
 
     return (newObjs);
 }
 
 function addPodcastIdToItunesEpisodes(episodes, podcastId) {
 
-    newEpisodes = []
+    newEpisodes = [];
     episodes.forEach(episode => {
 
         episode.id = episode.id + "|" + podcastId;
@@ -87,15 +91,92 @@ function generateAwards(explicit_content) {
     return (awards);
 };
 
-async function podcastToSeries(podcast, origin) {
+function podcastToSeries(podcast) {
 
     let released = "";
     if (podcast.releaseDate) released = podcast.releaseDate;
 
     let smallImg;
     let largeImg;
-    if (podcast.artworkUrl100) smallImg = podcast.artworkUrl100
-    if (podcast.artworkUrl160) largeImg = podcast.artworkUrl160
+    if (podcast.artworkUrl100) smallImg = podcast.artworkUrl100;
+    if (podcast.artworkUrl160) largeImg = podcast.artworkUrl160;
+
+    if (!podcast.artworkUrl160) {
+        largeImg = smallImg;
+    }
+
+    const series = stremioConvertor.getStremioSeries(
+        constants.ITUNES_ID_PREFIX + podcast.collectionId,
+        podcast.collectionName,
+        smallImg,
+        getAttributesTitle(podcast.country, podcast.genres, podcast.trackCount),
+        largeImg,
+        "The podcast " + podcast.collectionName + " by " + podcast.artistName + ", from " + podcast.country + " released at: " + released,
+        podcast.artistName,
+        released,
+        null,
+        podcast.country,
+        generateAwards(podcast.collectionExplicitness),
+        podcast.collectionViewUrl
+    );
+
+    return series;
+}
+
+function getAttributesTitle(country, genres, numOfEpisodes, lastEpisodeDuration) {
+    let countryTitle = "<b>Country: </b>";
+    let attributesTitles = ["<em>" + constants.API_CONSTANTS.STREAMS_TITLES.ITUNES_STREAM_TITLE + "</em>"]
+    attributesTitles.push(countryTitle += country);
+
+    if (numOfEpisodes) {
+        let numOfEpisodesTitle = "<b>Numer of episodes: </b>";
+        attributesTitles.push(numOfEpisodesTitle += numOfEpisodes);
+    }
+
+    if (lastEpisodeDuration) {
+        let lastEpisodeDurationTitle = "<b>Last episode duration: </b>";
+        attributesTitles.push(lastEpisodeDurationTitle += lastEpisodeDuration);
+    }
+
+    genresTitle = "<b>Genres: </b>";
+    genres.forEach(genre => {
+
+        genresTitle += genre + " | "
+    });
+    attributesTitles.push(genresTitle);
+
+    return (attributesTitles)
+}
+
+function podcastToSeriesVideo(podcast) {
+    let series = {
+        id: podcast.collectionId,
+        title: podcast.collectionName,
+        thumbnail: podcast.artworkUrl60,
+        available: true,
+        trailer: podcast.youtube_url
+    };
+
+    return series;
+}
+
+function getStreamsFromEpisode(episode) {
+    let streams = [{
+        url: episode.audio,
+        title: constants.API_CONSTANTS.STREAMS_TITLES.DEFAULT_STREAM_TITLE
+    }];
+
+    return streams;
+}
+
+const podcastToFullSeries = async function (podcast) {
+    let released = "";
+    if (podcast.releaseDate) released = podcast.releaseDate;
+
+    let smallImg;
+    let largeImg;
+    if (podcast.artworkUrl100) smallImg = podcast.artworkUrl100;
+    if (podcast.artworkUrl160) largeImg = podcast.artworkUrl160;
 
     if (!podcast.artworkUrl160) {
         largeImg = smallImg;
@@ -122,87 +203,40 @@ async function podcastToSeries(podcast, origin) {
     };
 
     let episodesAsVideos = {};
-    if (origin !== "catalog") {
+    const allEpisodes = await podcastsApiItunes.getEpisodesByPodcastId(podcast.feedUrl);
+    if (!Array.isArray(allEpisodes)) {
 
-        const allEpisodes = await podcastsApiItunes.getEpisodesByPodcastId(podcast.collectionId);
 
-        episodesAsVideos = episodesToVideos(fixJsons(allEpisodes));
-        episodesAsVideos.asArray = addPodcastIdToItunesEpisodes(episodesAsVideos.asArray, podcast.collectionId);
-
-        series.videos = episodesAsVideos.asArray;
-
-        // Adds extra field on the series (the episodes / videos by id)
-        series.videosById = episodesAsVideos.asObjectById;
     }
+    else {
+        episodesAsVideos = episodesToVideos(allEpisodes);
+        episodesAsVideos.asArray = addPodcastIdToItunesEpisodes(episodesAsVideos.asArray, podcast.collectionId);
+    }
+
+    series.videos = episodesAsVideos.asArray;
+
+    // Adds extra field on the series (the episodes / videos by id)
+    series.videosById = episodesAsVideos.asObjectById;
 
     return series;
 };
 
-function getAttributesTitle(country, genres, numOfEpisodes, lastEpisodeDuration){
-    let countryTitle = "<b>Country: </b>";
-    let attributesTitles = ["<em>" + constants.API_CONSTANTS.STREAMS_TITLES.ITUNES_STREAM_TITLE + "</em>"]
-    attributesTitles.push(countryTitle += country);
-    
-    if (numOfEpisodes){
-        let numOfEpisodesTitle = "<b>Numer of episodes: </b>";
-        attributesTitles.push(numOfEpisodesTitle += numOfEpisodes);
-    } 
+const getStremioMetaFromPodcast = async function (podcast) {
 
-    if (lastEpisodeDuration){
-        let lastEpisodeDurationTitle = "<b>Last episode duration: </b>";
-        attributesTitles.push(lastEpisodeDurationTitle += lastEpisodeDuration);
-    }
+    const podcastMeta = await podcastToFullSeries(podcast);
+    return stremioConvertor.getStremioMeta(podcastMeta);
 
-    genresTitle = "<b>Genres: </b>";
-    genres.forEach(genre => {
-
-        genresTitle += genre + " | "
-    });
-    attributesTitles.push(genresTitle);
-
-    return (attributesTitles)
-}
-
-async function podcastsToSerieses(podcasts, origin) {
-
-    let serieses = [];
-
-    for (let i = 0; i < podcasts.length; i++) {
-
-        let series = await podcastToSeries(podcasts[i], origin);
-        serieses.push(series);
-    }
-
-    return (serieses);
-}
-
-function podcastToSeriesVideo(podcast) {
-    let series = {
-        id: podcast.collectionId,
-        title: podcast.collectionName,
-        thumbnail: podcast.artworkUrl60,
-        available: true,
-        trailer: podcast.youtube_url
-    };
-
-    return series;
-}
-
-function getStreamsFromEpisode(episode) {
-    let streams = [{
-        url: episode.audio,
-        title: constants.API_CONSTANTS.STREAMS_TITLES.DEFAULT_STREAM_TITLE
-    }];
-
-    return streams;
-}
+    // return {
+    //     meta: await convertorsItunes.podcastToFullSeries(podcast),
+    //     video: convertorsItunes.podcastToSeriesVideo(podcast)
+    // };
+};
 
 module.exports = {
+    podcastToFullSeries,
     episodesToVideos,
-    addPodcastIdToItunesEpisodes,
-    fixJsons,
-    podcastsToSerieses,
     podcastToSeriesVideo,
     podcastToSeries,
-    getStreamsFromEpisode
+    getStreamsFromEpisode,
+    getStremioMetaFromPodcast,
 };

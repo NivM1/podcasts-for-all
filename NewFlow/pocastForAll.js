@@ -47,10 +47,9 @@ function checkIfPodcastExist(podcasts, name) {
 const getPodcastsBySearch = async function (searchTerm) {
 
     const itunesPodcasts = await podcastsApiItunes.search(searchTerm);
-    const itunesStremioPodcasts = await convertorsItunes.podcastsToSerieses(itunesPodcasts, constants.HANDLERS.CATALOG.toLowerCase());
+    const itunesStremioPodcasts = itunesPodcasts.map(convertorsItunes.podcastToSeries);
 
     const spreakerShows = await spreakerApi.searchShows(searchTerm);
-
     const spreakerStremioPodcasts = [];
     for (let i = 0; i < spreakerShows.length; i++) {
         spreakerStremioPodcasts.push(await spreakerConvertor.showToStremioSeries(spreakerShows[i]));
@@ -71,15 +70,15 @@ const getMetadataForPodcast = async function (podcastId) {
         return spreakerStremioMeta;
     }
 
-    const podcast = await podcastsApiItunes.getPodcastById(podcastId);
+    if (podcastId.startsWith(constants.ITUNES_ID_PREFIX)) {
+        const itunesId = podcastId.replace(constants.ITUNES_ID_PREFIX, '');
+        const itunesPodcast = await podcastsApiItunes.getPodcastById(itunesId);
 
-    logger.info("Podcast: " + podcast.collectionName + " | " + podcast.country + ": " + constants.HANDLERS.META, constants.API_CONSTANTS.TYPES.PODCAST, null, 1, podcast);
+        logger.info("Podcast: " + itunesPodcast.collectionName + " | " + itunesPodcast.country + ": " + constants.HANDLERS.META, constants.API_CONSTANTS.TYPES.PODCAST, null, 1, itunesPodcast);
 
-    return {
-        meta: await convertorsItunes.podcastToSeries(podcast, constants.HANDLERS.META.toLowerCase()),
-        video: convertorsItunes.podcastToSeriesVideo(podcast)
-    };
-
+        const itunesStremioMeta = await convertorsItunes.getStremioMetaFromPodcast(itunesPodcast);
+        return itunesStremioMeta;
+    }
 };
 
 const getStreamsForEpisodeId = async function (episodeId) {

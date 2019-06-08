@@ -76,6 +76,7 @@ const PODCASTS_API_KEY = {
 
 const ID_PREFIX = "ap";
 const SPREAKER_ID_PREFIX = 'SPREAKER:';
+const ITUNES_ID_PREFIX = 'ITUNES:';
 
 const CONTACT_EMAIL = "podcasts_for_all@yahoo.com";
 const ADDON_LOGO = "https://github.com/NivM1/podcasts-for-all/blob/master/static/addon_logo.png?raw=true";
@@ -192,5 +193,6 @@ module.exports = {
     ADDON_LOGO,
     ADDON_BACKGROUND,
     SEARCH_PREFIX,
-    ENVIRONMENT
+    ENVIRONMENT,
+    ITUNES_ID_PREFIX
 };
