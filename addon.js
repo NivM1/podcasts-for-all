@@ -9,13 +9,7 @@ require('dotenv').config();
 // Internal dependencies
 const constants = require('./common/const');
 const logger = require("./common/logger.js");
-const convertors = require("./podcasts/convertors");
-const podcastsData = require("./podcasts/podcastsDataFetcher");
-const genresData = require("./podcasts/genresDataFetcher");
-const countriesData = require("./podcasts/countriesDataFetcher");
 const manifest = require('./manifest');
-const convertorsItunes = require("./itunes/convertors");
-const podcastsApiItunes = require("./itunes/api");
 const searchHelper = require("./resources/searchHelper");
 const podcastRetriver = require('./NewFlow/pocastForAll');
 
