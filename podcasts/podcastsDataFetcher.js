@@ -1,7 +1,7 @@
 const logger = require("../common/logger");
 const constants = require("../common/const");
 const podcastsApi = require("../common/podcastsApi");
-const podcastsApiItunes = require("../common/podcastsApiItunes");
+const podcastsApiItunes = require("../itunes/api");
 
 async function getBestPodcasts(skip, genreId, region) {
 
@@ -49,7 +49,9 @@ async function searchPodcasts(searchTerm, genreIds, offsetForPagination, isGenre
     let logMessageBasic = constants.LOG_MESSAGES.START_SEARCH_PODCASTS;
     if (isGenreSearch) logMessageBasic = constants.LOG_MESSAGES.START_SEARCH_PODCASTS_FOR_GENRE;
 
-    logger.debug(logMessageBasic  + ": " +  searchTerm, constants.HANDLERS.CATALOG, constants.API_CONSTANTS.TYPES.PODCAST, constants.CATALOGS.SEARCH.NAME, null, {search: searchTerm});
+    logger.debug(logMessageBasic + ": " + searchTerm, constants.HANDLERS.CATALOG, constants.API_CONSTANTS.TYPES.PODCAST, constants.CATALOGS.SEARCH.NAME, null, {
+        search: searchTerm
+    });
 
     // For offset for pagination filter
     let offset = constants.API_CONSTANTS.DEFAULT_OFFSET;
@@ -67,7 +69,9 @@ async function searchPodcasts(searchTerm, genreIds, offsetForPagination, isGenre
 }
 
 async function getPodcastById(id, params = {}) {
-    logger.debug(constants.LOG_MESSAGES.START_GET_PODCAST_BY_ID + id, constants.HANDLERS.CATALOG, constants.API_CONSTANTS.TYPES.PODCAST, null, null, {id: id});
+    logger.debug(constants.LOG_MESSAGES.START_GET_PODCAST_BY_ID + id, constants.HANDLERS.CATALOG, constants.API_CONSTANTS.TYPES.PODCAST, null, null, {
+        id: id
+    });
 
     // For offset for pagination filter
     try {
@@ -81,7 +85,9 @@ async function getPodcastById(id, params = {}) {
 }
 
 async function getEpisodeById(id) {
-    logger.debug(constants.LOG_MESSAGES.START_GET_EPISODE_BY_ID + id, constants.HANDLERS.CATALOG, constants.API_CONSTANTS.TYPES.EPISODE, null, null, {id: id});
+    logger.debug(constants.LOG_MESSAGES.START_GET_EPISODE_BY_ID + id, constants.HANDLERS.CATALOG, constants.API_CONSTANTS.TYPES.EPISODE, null, null, {
+        id: id
+    });
 
     // For offset for pagination filter
     try {
@@ -103,25 +109,9 @@ async function getEpisodeById(id) {
 async function getAllEpisodesForPodcast(podcast, itunesFlag) {
     let episodes = [];
 
-    if (process.env.USE_ITUNES === "true" && itunesFlag){
-        
-		logger.info(constants.LOG_MESSAGES.USING_ITUNES_GET_EPISODES);
-    
-        episodes = await podcastsApiItunes.getEpisodesByPodcastId(podcast.itunes_id);      
-    }
-    else {
-        episodes.push(...podcast.episodes);
-        let nextEpisodePubDate = podcast.next_episode_pub_date;
-    
-        while (nextEpisodePubDate) {
-            const results = await getPodcastById(podcast.id, {
-                next_episode_pub_date: nextEpisodePubDate,
-            });
-    
-            nextEpisodePubDate = results.next_episode_pub_date;
-            episodes.push(...results.episodes)
-        }
-    }
+    logger.info(constants.LOG_MESSAGES.USING_ITUNES_GET_EPISODES);
+
+    episodes = await podcastsApiItunes.getEpisodesByPodcastId(podcast.itunes_id);
 
     return episodes.reverse();
 }
@@ -133,7 +123,9 @@ async function getFeelingLucky() {
     try {
         const response = await podcastsApi.getFeelingLucky();
 
-        logger.debug(constants.LOG_MESSAGES.SUCCESS_GET_FEELING_LUCKY + response.data.id, constants.CATALOGS.FEELING_LUCKY, null, 1, {result: response.data});
+        logger.debug(constants.LOG_MESSAGES.SUCCESS_GET_FEELING_LUCKY + response.data.id, constants.CATALOGS.FEELING_LUCKY, null, 1, {
+            result: response.data
+        });
         return response.data;
     } catch (e) {
         logListenNoteErrors('getting feeling lucky podcast', e);
@@ -143,7 +135,6 @@ async function getFeelingLucky() {
 
 function logListenNoteErrors(operation, e) {
 
-    if (!process.env.USE_ITUNES === "true"){
     if (e.responce.status === 401) {
         logger.error('on ' + operation + ' we got error code 401 - wrong api key or your account is suspended.\n exception detail:' + e);
     } else if (e.responce.status === 404) {
@@ -155,7 +146,6 @@ function logListenNoteErrors(operation, e) {
     } else {
         logger.error(constants.LOG_MESSAGES.ERROR_SEARCH_PODCASTS + e);
     }
-}
 }
 
 module.exports = {

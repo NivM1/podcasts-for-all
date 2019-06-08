@@ -2,7 +2,7 @@ const logger = require("../common/logger");
 const constants = require("../common/const");
 const podcastsData = require("./podcastsDataFetcher");
 const genresData = require("./genresDataFetcher");
-const convertorsItunes = require("./convertorsItunes");
+const convertorsItunes = require("../itunes/convertors");
 
 // All functions that convert podcast or episode object to Stremio object
 function episodeToVideo(episode, episodeNumber) {
@@ -99,16 +99,11 @@ async function podcastToSeries(podcast, origin) {
         const allEpisodes = await podcastsData.getAllEpisodesForPodcast(podcast, itunesFlag);
 
         let episodesAsVideos = {};
-        if (process.env.USE_ITUNES === "true" && itunesFlag){
 
-            episodesAsVideos = convertorsItunes.episodesToVideos(convertorsItunes.fixJsons(allEpisodes));
-            episodesAsVideos.asArray = convertorsItunes.addPodcastIdToItunesEpisodes(episodesAsVideos.asArray, podcast.id);
-        }
-        else {
+        episodesAsVideos = convertorsItunes.episodesToVideos(convertorsItunes.fixJsons(allEpisodes));
+        episodesAsVideos.asArray = convertorsItunes.addPodcastIdToItunesEpisodes(episodesAsVideos.asArray, podcast.id);
 
-            episodesAsVideos = episodesToVideos(allEpisodes);
-        }
-        
+
         series.videos = episodesAsVideos.asArray;
 
         // Adds extra field on the series (the episodes / videos by id)
@@ -204,53 +199,8 @@ function getStreamsFromEpisode(episode) {
         title: constants.API_CONSTANTS.STREAMS_TITLES.DEFAULT_STREAM_TITLE
     }];
 
-    if (process.env.USE_ITUNES === "true"){
+    return (streams);
 
-        return (streams);
-    }
-
-    streams.push(
-        {
-            externalUrl: episode.listennotes_url,
-            title: constants.API_CONSTANTS.STREAMS_TITLES.LISTEN_NOTES_STREAM_TITLE
-        });
-
-    if (episode.podcast.website) streams.push({
-        externalUrl: episode.podcast.website,
-        title: constants.API_CONSTANTS.STREAMS_TITLES.WEBSITE_STREAM_TITLE
-    });
-
-    if (episode.podcast.rss) streams.push({
-        externalUrl: episode.podcast.rss,
-        title: constants.API_CONSTANTS.STREAMS_TITLES.RSS_STREAM_TITLE
-    });
-
-    if (episode.podcast.extra.youtube_url) streams.push({
-        ytid: episode.podcast.extra.youtube_url.split("?v=")[1],
-        title: constants.API_CONSTANTS.STREAMS_TITLES.YOUTUBE_STREAM_TITLE
-    });
-
-    if (episode.podcast.extra.spotify_url) streams.push({
-        externalUrl: episode.podcast.extra.spotify_url,
-        title: constants.API_CONSTANTS.STREAMS_TITLES.SPOTIFY_STREAM_TITLE
-    });
-
-    if (episode.podcast.extra.facebook_handle) streams.push({
-        externalUrl: constants.API_CONSTANTS.FACEBOOK_BASE_URL + episode.podcast.extra.facebook_handle,
-        title: constants.API_CONSTANTS.STREAMS_TITLES.FACEBOOK_STREAM_TITLE
-    });
-
-    if (episode.podcast.extra.twitter_handle) streams.push({
-        externalUrl: constants.API_CONSTANTS.TWITTER_BASE_URL + episode.podcast.extra.twitter_handle,
-        title: constants.API_CONSTANTS.STREAMS_TITLES.TWITTER_STREAM_TITLE
-    });
-
-    if (episode.podcast.extra.instagram_handle) streams.push({
-        externalUrl: constants.API_CONSTANTS.INSTAGRAM_BASE_URL + episode.podcast.extra.instagram_handle,
-        title: constants.API_CONSTANTS.STREAMS_TITLES.INSTAGRAM_STREAM_TITLE
-    });
-
-    return streams;
 }
 
 function luckyPodcastToPodcast(luckyPodcast) {

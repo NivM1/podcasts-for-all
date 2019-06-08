@@ -103,7 +103,7 @@ $ npm install
 * Set your `.env` file like that:
 ```diff
 +# VERSION= [Addon Version]
-+# USE_ITUNES= [Shoul'd it use itunes api to get episodes]
++# ENVIRONMENT= [development/production]
 +# PODCASTS_API_KEY= [Listen Notes API KEY]
 +# LOG_LEVEL= [Logger level- such as: trace, debug, error...]
 +# LOGGER_TOKEN= [Your Logzio api` token]
