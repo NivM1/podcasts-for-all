@@ -50,10 +50,11 @@ const getPodcastsBySearch = async function (searchTerm) {
     const itunesStremioPodcasts = itunesPodcasts.map(convertorsItunes.podcastToSeries);
 
     const spreakerShows = await spreakerApi.searchShows(searchTerm);
-    const spreakerStremioPodcasts = [];
+    const spreakerStremioPodcastsPromise = [];
     for (let i = 0; i < spreakerShows.length; i++) {
-        spreakerStremioPodcasts.push(await spreakerConvertor.showToStremioSeries(spreakerShows[i]));
+        spreakerStremioPodcastsPromise.push(spreakerConvertor.showToStremioSeries(spreakerShows[i]));
     }
+    const spreakerStremioPodcasts = await Promise.all(spreakerStremioPodcastsPromise);
 
     return getMixedPodcasts(itunesStremioPodcasts, spreakerStremioPodcasts);
 };
