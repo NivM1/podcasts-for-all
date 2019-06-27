@@ -136,11 +136,11 @@ builder.defineStreamHandler(async ({
     type
 }) => {
 
-    logger.info(constants.LOG_MESSAGES.START_STREAM_HANDLER + "(type: " + type + " & id: " + id + ")", constants.HANDLERS.STREAM, constants.API_CONSTANTS.TYPES.EPISODE, null, 1, {
-        id: id
-    });
+    let episodeId = id.replace(constants.ID_PREFIX, "");
 
-    episodeId = id.replace(constants.ID_PREFIX, "");
+    logger.info(constants.LOG_MESSAGES.START_STREAM_HANDLER + "(type: " + type + " & id: " + id + ")", constants.HANDLERS.STREAM, constants.API_CONSTANTS.TYPES.EPISODE, null, 1, {
+        id: episodeId
+    });
 
     let episode = {};
 
