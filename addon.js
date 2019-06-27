@@ -124,7 +124,7 @@ builder.defineMetaHandler(async ({
     const podcastId = id.replace(constants.ID_PREFIX, "");
 
     const podcastMetaObject = await podcastRetriver.getMetadataForPodcast(podcastId);
-    logger.info("Podcast: " + podcastMetaObject.meta.name + " | " + podcastMetaObject.meta.country + " | " + podcastMetaObject.meta.language, constants.HANDLERS.META, constants.API_CONSTANTS.TYPES.PODCAST, null, 1, podcastMetaObject);
+    logger.info("Podcast: " + podcastMetaObject.meta.name + " | " + podcastMetaObject.meta.country + " | " + podcastMetaObject.meta.language, constants.HANDLERS.META, constants.API_CONSTANTS.TYPES.PODCAST, null, 1, podcastMetaObject.meta);
 
     return podcastMetaObject;
 });
