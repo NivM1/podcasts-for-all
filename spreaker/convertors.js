@@ -97,7 +97,7 @@ const getStreamsForEpisode = function (episode) {
     return stremioConvertor.getStreamioStreams([
         stremioConvertor.getStremioStream(episode.playback_url, null, "Stream"),
         stremioConvertor.getStremioStream(null, episode.download_url, "Download"),
-        stremioConvertor.getStremioStream(null, episode.site_url, "Episode on Spreaker")]);
+        stremioConvertor.getStremioStream(null, episode.site_url, "Listen on Spreaker")]);
 };
 
 module.exports = {

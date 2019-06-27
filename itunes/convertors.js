@@ -224,7 +224,7 @@ const podcastToFullSeries = async function (podcast) {
 const getStremioMetaFromPodcast = async function (podcast) {
 
     const podcastMeta = await podcastToFullSeries(podcast);
-    return stremioConvertor.getStremioMeta(podcastMeta);
+    return stremioConvertor.getStremioMeta(podcastMeta, podcastMeta.videos);
 
     // return {
     //     meta: await convertorsItunes.podcastToFullSeries(podcast),
