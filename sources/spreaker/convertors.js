@@ -1,7 +1,7 @@
-const stremioConvertor = require('../common/stremioConvertor');
-const constants = require('../common/const');
+const stremioConvertor = require('../../common/stremioConvertor');
+const constants = require('../../common/const');
 const podcastApi = require('./api');
-const languages = require('../resources/languages');
+const languages = require('../../resources/languages');
 
 const showToStremioSeries = async function (show) {
 

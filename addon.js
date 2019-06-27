@@ -11,7 +11,7 @@ const constants = require('./common/const');
 const logger = require("./common/logger.js");
 const manifest = require('./manifest');
 const searchHelper = require("./resources/searchHelper");
-const podcastRetriver = require('./NewFlow/pocastForAll');
+const podcastRetriver = require('./pocastForAll');
 
 logger.info(constants.LOG_MESSAGES.START_ADDON + " Version: " + process.env.VERSION);
 
