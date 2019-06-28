@@ -66,5 +66,5 @@ module.exports = {
     contactEmail: constants.CONTACT_EMAIL,
     logo: constants.ADDON_LOGO,
     background: constants.ADDON_BACKGROUND,
-    description: "Join Thousands of daily listeners! Stream the best & most verstile HQ Podcasts- It will be a great listening experience! Over 1,000,000 Podcasts and 44,000,000 Episodes, All genres, languages, moods & trends"
+    description: "$ Winner of Stremio 2019 Addon Competition $ Join Thousands of daily listeners! Stream the best & most verstile HQ Podcasts- It will be a great listening experience! Over 1,000,000 Podcasts and 44,000,000 Episodes, All genres, languages, moods & trends"
 };
